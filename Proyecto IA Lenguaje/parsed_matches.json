@@ -1,0 +1,440 @@
+{
+  "1": [
+    {
+      "t1": "México",
+      "t2": "Sudáfrica",
+      "date": "11/06",
+      "time": "21:00"
+    },
+    {
+      "t1": "Corea del Sur",
+      "t2": "República Checa",
+      "date": "12/06",
+      "time": "04:00"
+    },
+    {
+      "t1": "Canadá",
+      "t2": "Bosnia Herzegovina",
+      "date": "12/06",
+      "time": "21:00"
+    },
+    {
+      "t1": "Estados Unidos",
+      "t2": "Paraguay",
+      "date": "13/06",
+      "time": "03:00"
+    },
+    {
+      "t1": "Qatar",
+      "t2": "Suiza",
+      "date": "13/06",
+      "time": "21:00"
+    },
+    {
+      "t1": "Brasil",
+      "t2": "Marruecos",
+      "date": "14/06",
+      "time": "00:00"
+    },
+    {
+      "t1": "Haití",
+      "t2": "Escocia",
+      "date": "14/06",
+      "time": "03:00"
+    },
+    {
+      "t1": "Australia",
+      "t2": "Turquía",
+      "date": "14/06",
+      "time": "06:00"
+    },
+    {
+      "t1": "Alemania",
+      "t2": "Curaçao",
+      "date": "14/06",
+      "time": "19:00"
+    },
+    {
+      "t1": "Países Bajos",
+      "t2": "Japón",
+      "date": "14/06",
+      "time": "22:00"
+    },
+    {
+      "t1": "Costa de Marfil",
+      "t2": "Ecuador",
+      "date": "15/06",
+      "time": "01:00"
+    },
+    {
+      "t1": "Suecia",
+      "t2": "Túnez",
+      "date": "15/06",
+      "time": "04:00"
+    },
+    {
+      "t1": "España",
+      "t2": "Cabo Verde",
+      "date": "15/06",
+      "time": "18:00"
+    },
+    {
+      "t1": "Bélgica",
+      "t2": "Egipto",
+      "date": "15/06",
+      "time": "21:00"
+    },
+    {
+      "t1": "Arabia Saudí",
+      "t2": "Uruguay",
+      "date": "16/06",
+      "time": "00:00"
+    },
+    {
+      "t1": "Irán",
+      "t2": "Nueva Zelanda",
+      "date": "16/06",
+      "time": "03:00"
+    },
+    {
+      "t1": "Francia",
+      "t2": "Senegal",
+      "date": "16/06",
+      "time": "21:00"
+    },
+    {
+      "t1": "Iraq",
+      "t2": "Noruega",
+      "date": "17/06",
+      "time": "00:00"
+    },
+    {
+      "t1": "Argentina",
+      "t2": "Argelia",
+      "date": "17/06",
+      "time": "03:00"
+    },
+    {
+      "t1": "Austria",
+      "t2": "Jordania",
+      "date": "17/06",
+      "time": "06:00"
+    },
+    {
+      "t1": "Portugal",
+      "t2": "Congo",
+      "date": "17/06",
+      "time": "19:00"
+    },
+    {
+      "t1": "Inglaterra",
+      "t2": "Croacia",
+      "date": "17/06",
+      "time": "22:00"
+    },
+    {
+      "t1": "Ghana",
+      "t2": "Panamá",
+      "date": "18/06",
+      "time": "01:00"
+    },
+    {
+      "t1": "Uzbekistán",
+      "t2": "Colombia",
+      "date": "18/06",
+      "time": "04:00"
+    }
+  ],
+  "2": [
+    {
+      "t1": "República Checa",
+      "t2": "Sudáfrica",
+      "date": "18/06",
+      "time": "18:00"
+    },
+    {
+      "t1": "Suiza",
+      "t2": "Bosnia Herzegovina",
+      "date": "18/06",
+      "time": "21:00"
+    },
+    {
+      "t1": "Canadá",
+      "t2": "Qatar",
+      "date": "19/06",
+      "time": "00:00"
+    },
+    {
+      "t1": "México",
+      "t2": "Corea del Sur",
+      "date": "19/06",
+      "time": "03:00"
+    },
+    {
+      "t1": "Estados Unidos",
+      "t2": "Australia",
+      "date": "19/06",
+      "time": "21:00"
+    },
+    {
+      "t1": "Escocia",
+      "t2": "Marruecos",
+      "date": "20/06",
+      "time": "00:00"
+    },
+    {
+      "t1": "Brasil",
+      "t2": "Haití",
+      "date": "20/06",
+      "time": "02:30"
+    },
+    {
+      "t1": "Turquía",
+      "t2": "Paraguay",
+      "date": "20/06",
+      "time": "05:00"
+    },
+    {
+      "t1": "Países Bajos",
+      "t2": "Suecia",
+      "date": "20/06",
+      "time": "19:00"
+    },
+    {
+      "t1": "Alemania",
+      "t2": "Costa de Marfil",
+      "date": "20/06",
+      "time": "22:00"
+    },
+    {
+      "t1": "Ecuador",
+      "t2": "Curaçao",
+      "date": "21/06",
+      "time": "02:00"
+    },
+    {
+      "t1": "Túnez",
+      "t2": "Japón",
+      "date": "21/06",
+      "time": "06:00"
+    },
+    {
+      "t1": "España",
+      "t2": "Arabia Saudí",
+      "date": "21/06",
+      "time": "18:00"
+    },
+    {
+      "t1": "Bélgica",
+      "t2": "Irán",
+      "date": "21/06",
+      "time": "21:00"
+    },
+    {
+      "t1": "Uruguay",
+      "t2": "Cabo Verde",
+      "date": "22/06",
+      "time": "00:00"
+    },
+    {
+      "t1": "Nueva Zelanda",
+      "t2": "Egipto",
+      "date": "22/06",
+      "time": "03:00"
+    },
+    {
+      "t1": "Argentina",
+      "t2": "Austria",
+      "date": "22/06",
+      "time": "19:00"
+    },
+    {
+      "t1": "Francia",
+      "t2": "Iraq",
+      "date": "22/06",
+      "time": "23:00"
+    },
+    {
+      "t1": "Noruega",
+      "t2": "Senegal",
+      "date": "23/06",
+      "time": "02:00"
+    },
+    {
+      "t1": "Jordania",
+      "t2": "Argelia",
+      "date": "23/06",
+      "time": "05:00"
+    },
+    {
+      "t1": "Portugal",
+      "t2": "Uzbekistán",
+      "date": "23/06",
+      "time": "19:00"
+    },
+    {
+      "t1": "Inglaterra",
+      "t2": "Ghana",
+      "date": "23/06",
+      "time": "22:00"
+    },
+    {
+      "t1": "Panamá",
+      "t2": "Croacia",
+      "date": "24/06",
+      "time": "01:00"
+    },
+    {
+      "t1": "Colombia",
+      "t2": "Congo",
+      "date": "24/06",
+      "time": "04:00"
+    }
+  ],
+  "3": [
+    {
+      "t1": "Bosnia Herzegovina",
+      "t2": "Qatar",
+      "date": "24/06",
+      "time": "21:00"
+    },
+    {
+      "t1": "Suiza",
+      "t2": "Canadá",
+      "date": "24/06",
+      "time": "21:00"
+    },
+    {
+      "t1": "Marruecos",
+      "t2": "Haití",
+      "date": "25/06",
+      "time": "00:00"
+    },
+    {
+      "t1": "Escocia",
+      "t2": "Brasil",
+      "date": "25/06",
+      "time": "00:00"
+    },
+    {
+      "t1": "República Checa",
+      "t2": "México",
+      "date": "25/06",
+      "time": "03:00"
+    },
+    {
+      "t1": "Sudáfrica",
+      "t2": "Corea del Sur",
+      "date": "25/06",
+      "time": "03:00"
+    },
+    {
+      "t1": "Curaçao",
+      "t2": "Costa de Marfil",
+      "date": "25/06",
+      "time": "22:00"
+    },
+    {
+      "t1": "Ecuador",
+      "t2": "Alemania",
+      "date": "25/06",
+      "time": "22:00"
+    },
+    {
+      "t1": "Japón",
+      "t2": "Suecia",
+      "date": "26/06",
+      "time": "01:00"
+    },
+    {
+      "t1": "Túnez",
+      "t2": "Países Bajos",
+      "date": "26/06",
+      "time": "01:00"
+    },
+    {
+      "t1": "Paraguay",
+      "t2": "Australia",
+      "date": "26/06",
+      "time": "04:00"
+    },
+    {
+      "t1": "Turquía",
+      "t2": "Estados Unidos",
+      "date": "26/06",
+      "time": "04:00"
+    },
+    {
+      "t1": "Noruega",
+      "t2": "Francia",
+      "date": "26/06",
+      "time": "21:00"
+    },
+    {
+      "t1": "Senegal",
+      "t2": "Iraq",
+      "date": "26/06",
+      "time": "21:00"
+    },
+    {
+      "t1": "Cabo Verde",
+      "t2": "Arabia Saudí",
+      "date": "27/06",
+      "time": "02:00"
+    },
+    {
+      "t1": "Uruguay",
+      "t2": "España",
+      "date": "27/06",
+      "time": "02:00"
+    },
+    {
+      "t1": "Egipto",
+      "t2": "Irán",
+      "date": "27/06",
+      "time": "05:00"
+    },
+    {
+      "t1": "Nueva Zelanda",
+      "t2": "Bélgica",
+      "date": "27/06",
+      "time": "05:00"
+    },
+    {
+      "t1": "Croacia",
+      "t2": "Ghana",
+      "date": "27/06",
+      "time": "23:00"
+    },
+    {
+      "t1": "Panamá",
+      "t2": "Inglaterra",
+      "date": "27/06",
+      "time": "23:00"
+    },
+    {
+      "t1": "Colombia",
+      "t2": "Portugal",
+      "date": "28/06",
+      "time": "01:30"
+    },
+    {
+      "t1": "Congo",
+      "t2": "Uzbekistán",
+      "date": "28/06",
+      "time": "01:30"
+    },
+    {
+      "t1": "Argelia",
+      "t2": "Austria",
+      "date": "28/06",
+      "time": "04:00"
+    },
+    {
+      "t1": "Jordania",
+      "t2": "Argentina",
+      "date": "28/06",
+      "time": "04:00"
+    }
+  ]
+}
