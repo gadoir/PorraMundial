@@ -66,6 +66,66 @@ class PorraHandler(http.server.SimpleHTTPRequestHandler):
                 self._send_cors_headers()
                 self.end_headers()
                 self.wfile.write(f'{{"error": "{str(e)}" }}'.encode())
+
+        elif self.path == '/api/save_motd':
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length)
+            
+            try:
+                data = json.loads(post_data.decode('utf-8'))
+                # Guardar en un archivo JSON para persistencia simple
+                with open('motd.json', 'w', encoding='utf-8') as f:
+                    json.dump(data, f, ensure_ascii=False, indent=4)
+                
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self._send_cors_headers()
+                self.end_headers()
+                self.wfile.write(b'{"success": true, "message": "Partido del día guardado"}')
+            except Exception as e:
+                self.send_response(500)
+                self._send_cors_headers()
+                self.end_headers()
+                self.wfile.write(f'{{"error": "{str(e)}" }}'.encode())
+
+        elif self.path == '/api/save_prediction':
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length)
+            
+            try:
+                data = json.loads(post_data.decode('utf-8'))
+                username = data.get('username', '').replace("'", "''")
+                match_id = data.get('matchId', '').replace("'", "''")
+                sign = data.get('sign', '').replace("'", "''")
+                timestamp = data.get('timestamp', '')
+                
+                # Crear la sentencia SQL
+                sql_file = 'pronostico_diario.sql'
+                file_exists = os.path.exists(sql_file)
+                
+                sql_statement = f"INSERT INTO pronosticos_diarios (username, match_id, sign, fecha_pronostico) VALUES ('{username}', '{match_id}', '{sign}', '{timestamp}');\n"
+                
+                with open(sql_file, 'a', encoding='utf-8') as f:
+                    if not file_exists:
+                        f.write("CREATE TABLE IF NOT EXISTS pronosticos_diarios (\n")
+                        f.write("    id INTEGER PRIMARY KEY AUTOINCREMENT,\n")
+                        f.write("    username VARCHAR(100) NOT NULL,\n")
+                        f.write("    match_id VARCHAR(255) NOT NULL,\n")
+                        f.write("    sign VARCHAR(2) NOT NULL,\n")
+                        f.write("    fecha_pronostico DATETIME\n")
+                        f.write(");\n\n")
+                    f.write(sql_statement)
+                
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self._send_cors_headers()
+                self.end_headers()
+                self.wfile.write(b'{"success": true, "message": "Pronóstico guardado en SQL"}')
+            except Exception as e:
+                self.send_response(500)
+                self._send_cors_headers()
+                self.end_headers()
+                self.wfile.write(f'{{"error": "{str(e)}" }}'.encode())
         else:
             self.send_response(404)
             self._send_cors_headers()
