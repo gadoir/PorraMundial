@@ -1,3 +1,151 @@
+// --- Constantes del Cuadro Eliminatorio ---
+const structureBracket = {
+    dieciseisavos_L: [
+        { id: 1, home: "2A", away: "2B", date: "28/06", time: "21:00" },
+        { id: 2, home: "1C", away: "2F", date: "29/06", time: "19:00" },
+        { id: 3, home: "1E", away: "3rd A/B/C/D/F", date: "29/06", time: "22:30" },
+        { id: 4, home: "1F", away: "2C", date: "30/06", time: "03:00" },
+        { id: 5, home: "2E", away: "Group I 2nd", date: "30/06", time: "19:00" },
+        { id: 6, home: "Group I Winner", away: "3rd C/D/F/G/H", date: "30/06", time: "23:00" },
+        { id: 7, home: "1A", away: "3rd C/E/F/H/I", date: "01/07", time: "03:00" },
+        { id: 8, home: "Group L Winner", away: "3rd E/H/I/J/K", date: "01/07", time: "18:00" }
+    ],
+    dieciseisavos_R: [
+        { id: 9, home: "1G", away: "3rd A/E/H/I/J", date: "01/07", time: "22:00" },
+        { id: 10, home: "1D", away: "3rd B/E/F/I/J", date: "02/07", time: "02:00" },
+        { id: 11, home: "1H", away: "Group J 2nd", date: "02/07", time: "21:00" },
+        { id: 12, home: "Group K 2nd", away: "Group L 2nd", date: "03/07", time: "01:00" },
+        { id: 13, home: "1B", away: "3rd E/F/G/I/J", date: "03/07", time: "05:00" },
+        { id: 14, home: "2D", away: "2G", date: "03/07", time: "20:00" },
+        { id: 15, home: "Group J Winner", away: "2H", date: "04/07", time: "00:00" },
+        { id: 16, home: "Group K Winner", away: "3rd D/E/I/J/L", date: "04/07", time: "03:30" }
+    ],
+    roundSchedule: {
+        "L-2": ["04/07, 19:00", "04/07, 23:00", "05/07, 22:00", "06/07, 02:00"],
+        "R-2": ["06/07, 21:00", "07/07, 02:00", "07/07, 18:00", "07/07, 22:00"],
+        "L-3": ["09/07, 22:00", "10/07, 21:00"],
+        "R-3": ["11/07, 23:00", "12/07, 03:00"],
+        "L-4": ["14/07, 21:00"],
+        "R-4": ["15/07, 21:00"]
+    }
+};
+
+const configBracket = {
+    L: { 1: { next: "L-2", count: 8 }, 2: { next: "L-3", count: 4 }, 3: { next: "L-4", count: 2 }, 4: { next: "final", count: 1 } },
+    R: { 1: { next: "R-2", count: 8 }, 2: { next: "R-3", count: 4 }, 3: { next: "R-4", count: 2 }, 4: { next: "final", count: 1 } }
+};
+
+function renderSide(side) {
+    for (let round = 1; round <= 4; round++) {
+        const col = document.getElementById(`col-${side}-${round}`);
+        if (!col) continue;
+        const count = configBracket[side][round].count;
+        for (let i = 0; i < count; i++) {
+            const matchId = i + 1;
+            const key = `${side}-${round}`;
+            const schedule = structureBracket.roundSchedule[key] ? structureBracket.roundSchedule[key][i] : "TBD, TBD";
+            const matchData = (round === 1) ? structureBracket[`dieciseisavos_${side}`][i] : { home: "Por definir", away: "Por definir", date: schedule.split(', ')[0], time: schedule.split(', ')[1] };
+            const container = document.createElement('div');
+            container.className = `match-container ${i % 2 === 0 ? 'top-of-pair' : 'bottom-of-pair'} ${round > 1 ? 'is-entry' : ''}`;
+            const spacerTop = document.createElement('div');
+            spacerTop.className = "match-spacer";
+            col.appendChild(spacerTop);
+            container.innerHTML = `
+                <div class="connector-in connector"></div>
+                <div class="match-box">
+                    <div class="match-header">${matchData.date}, ${matchData.time}</div>
+                    <div class="team-row" onclick="pick('${side}-${round}', ${matchId}, 'home')" id="${side}-${round}-${matchId}-home">
+                        <svg class="team-shield" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"></path></svg>
+                        <span class="team-name">${matchData.home}</span>
+                    </div>
+                    <div class="team-row" onclick="pick('${side}-${round}', ${matchId}, 'away')" id="${side}-${round}-${matchId}-away">
+                        <svg class="team-shield" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"></path></svg>
+                        <span class="team-name">${matchData.away}</span>
+                    </div>
+                </div>
+                ${round < 4 ? '<div class="connector-out connector"></div><div class="connector-vertical connector"></div>' : ''}
+                ${round === 4 ? '<div class="connector-out connector"></div>' : ''}
+            `;
+            col.appendChild(container);
+            if (i === count - 1) {
+                const spacerBottom = document.createElement('div');
+                spacerBottom.className = "match-spacer";
+                col.appendChild(spacerBottom);
+            }
+        }
+    }
+}
+
+function pick(key, matchId, pos) {
+    const homeEl = document.getElementById(`${key}-${matchId}-home`);
+    const awayEl = document.getElementById(`${key}-${matchId}-away`);
+    if (!homeEl || !awayEl) return;
+    
+    const homeName = homeEl.querySelector('.team-name').innerText;
+    const awayName = awayEl.querySelector('.team-name').innerText;
+    
+    if (homeName === "Por definir" || awayName === "Por definir") return;
+    
+    const winner = pos === 'home' ? homeName : awayName;
+    const loser = pos === 'home' ? awayName : homeName;
+    
+    [homeEl, awayEl].forEach(el => el.classList.remove('selected'));
+    const selected = pos === 'home' ? homeEl : awayEl;
+    selected.classList.add('selected');
+    
+    if (key === 'final' || key === 'third') return;
+    const [side, roundStr] = key.split('-');
+    const round = parseInt(roundStr);
+    const nextKey = configBracket[side][round].next;
+    
+    if (nextKey === 'final') {
+        const finalPos = side === 'L' ? 'home' : 'away';
+        updateBracketMatch('final', 1, finalPos, winner);
+        updateBracketMatch('third', 1, finalPos, loser);
+    } else {
+        const nextMatchId = Math.ceil(matchId / 2);
+        const nextPos = matchId % 2 === 0 ? 'away' : 'home';
+        updateBracketMatch(nextKey, nextMatchId, nextPos, winner);
+    }
+}
+
+function updateBracketMatch(key, id, pos, name) {
+    const el = document.getElementById(`${key}-${id}-${pos}`);
+    if (el) {
+        const nameEl = el.querySelector('.team-name');
+        nameEl.innerText = name;
+        nameEl.style.color = 'white';
+        el.classList.remove('selected');
+        clearDownstreamBracket(key, id);
+    }
+}
+
+function clearDownstreamBracket(key, id) {
+    if (key === 'final' || key === 'third') return;
+    const [side, roundStr] = key.split('-');
+    const round = parseInt(roundStr);
+    const nextKey = configBracket[side][round].next;
+    if (nextKey === 'final') {
+        const finalPos = side === 'L' ? 'home' : 'away';
+        resetBracketMatch('final', 1, finalPos);
+        resetBracketMatch('third', 1, finalPos);
+    } else {
+        const nextMatchId = Math.ceil(id / 2);
+        const nextPos = id % 2 === 0 ? 'away' : 'home';
+        resetBracketMatch(nextKey, nextMatchId, nextPos);
+    }
+}
+
+function resetBracketMatch(key, id, pos) {
+    const el = document.getElementById(`${key}-${id}-${pos}`);
+    if (el) {
+        el.querySelector('.team-name').innerText = "Por definir";
+        el.querySelector('.team-name').style.color = '#94a3b8';
+        el.classList.remove('selected');
+        clearDownstreamBracket(key, id);
+    }
+}
+
 // Lógica de la calculadora dinámica
 function calcularPuntos() {
     const top3Input = document.getElementById('calc-top3');
@@ -165,6 +313,14 @@ if (registerForm) {
 
 function registerUser(username, email, password, messageEl, form) {
     try {
+        // Validar espacios en el nombre de usuario
+        if (username.includes(' ')) {
+            messageEl.classList.remove('hidden', 'bg-green-500/20', 'text-green-400');
+            messageEl.classList.add('bg-red-500/20', 'text-red-400');
+            messageEl.innerText = 'El nombre de usuario no puede contener espacios.';
+            return;
+        }
+
         let users = JSON.parse(localStorage.getItem('porra_users') || '[]');
         if (users.some(u => u.username === username)) {
             messageEl.classList.remove('hidden', 'bg-green-500/20', 'text-green-400');
@@ -186,6 +342,11 @@ function registerUser(username, email, password, messageEl, form) {
         messageEl.classList.remove('hidden', 'bg-red-500/20', 'text-red-400');
         messageEl.classList.add('bg-green-500/20', 'text-green-400');
         messageEl.innerText = '¡Registro exitoso! Ya puedes iniciar sesión.';
+        
+        // Mostrar botón de WhatsApp tras registro
+        const whatsappBtn = document.getElementById('whatsapp-float');
+        if (whatsappBtn) whatsappBtn.classList.add('show');
+
         form.reset();
         
         // Si es del modal, pasamos a login tras 1.5s
@@ -260,21 +421,24 @@ function processLoginSuccess(username, isAdmin, isPaid = false) {
     const userSection = document.getElementById('user-section');
     if (userSection) userSection.classList.remove('hidden');
 
-    // Mostrar paneles correspondientes
+
+    // Paneles de Administración vs Usuario
+    const userPanel = document.getElementById('user-panel');
     if (isAdmin) {
         if (adminPanel) adminPanel.classList.remove('hidden');
+        if (userPanel) userPanel.classList.add('hidden'); // No mostrar panel de usuario a admins
     } else {
         if (adminPanel) adminPanel.classList.add('hidden');
+        if (userPanel) {
+            userPanel.classList.remove('hidden');
+            const welcomeName = document.getElementById('user-welcome-name');
+            if (welcomeName) welcomeName.innerText = username;
+            updatePaymentStatusUI(isPaid);
+        }
     }
 
-    // Siempre mostramos el panel de usuario para que todos vean su estado/pago
-    const userPanel = document.getElementById('user-panel');
-    if (userPanel) {
-        userPanel.classList.remove('hidden');
-        const welcomeName = document.getElementById('user-welcome-name');
-        if (welcomeName) welcomeName.innerText = username;
-        updatePaymentStatusUI(isPaid);
-    }
+    // Actualizar clasificación para resaltar al usuario actual
+    renderStandings();
 
     // Desplazar al panel
     const target = isAdmin ? adminPanel : userPanel;
@@ -387,21 +551,30 @@ function updateNavbarUI(username) {
     const registerBtn = document.getElementById('nav-register-btn');
     const userProfile = document.getElementById('user-nav-profile');
     const navUsername = document.getElementById('nav-username');
+    const whatsappBtn = document.getElementById('whatsapp-float');
 
     if (username) {
         if (authBtn) authBtn.classList.add('hidden');
         if (registerBtn) registerBtn.classList.add('hidden');
         if (userProfile) userProfile.classList.remove('hidden');
         if (navUsername) navUsername.innerText = username;
+        if (whatsappBtn) whatsappBtn.classList.add('show');
     } else {
         if (authBtn) authBtn.classList.remove('hidden');
         if (registerBtn) registerBtn.classList.remove('hidden');
         if (userProfile) userProfile.classList.add('hidden');
+        if (whatsappBtn) whatsappBtn.classList.remove('show');
     }
 }
 
-// Al cargar la página, verificar sesión
+// Al cargar la página, verificar sesión y actualizar contador
 document.addEventListener('DOMContentLoaded', () => {
+    // Inicializar mock users si es necesario (para mostrar que hay gente inscrita)
+    initMockUsers();
+    
+    // Actualizar contador inicial
+    updateInscriptionCounter();
+
     const loggedUser = localStorage.getItem('logged_user');
     if (loggedUser) {
         const isAdmin = localStorage.getItem('is_admin') === 'true';
@@ -410,6 +583,47 @@ document.addEventListener('DOMContentLoaded', () => {
         processLoginSuccess(loggedUser, isAdmin, userObj ? userObj.paid : false);
     }
 });
+
+function initMockUsers() {
+    let users = JSON.parse(localStorage.getItem('porra_users') || '[]');
+    // Solo añadimos mock users si no hay nadie registrado para no pisar datos reales
+    if (users.length === 0) {
+        const mockUsers = [
+            { username: 'Carlos_88', email: 'carlos@example.com', password: '123', paid: true, fecha: '2026-04-10 10:00:00' },
+            { username: 'Marta_G', email: 'marta@example.com', password: '123', paid: true, fecha: '2026-04-11 11:30:00' },
+            { username: 'Juanito', email: 'juanito@example.com', password: '123', paid: true, fecha: '2026-04-12 14:20:00' },
+            { username: 'Elena_WC', email: 'elena@example.com', password: '123', paid: true, fecha: '2026-04-13 09:15:00' },
+            { username: 'Rafa_99', email: 'rafa@example.com', password: '123', paid: true, fecha: '2026-04-14 18:45:00' }
+        ];
+        localStorage.setItem('porra_users', JSON.stringify(mockUsers));
+    }
+}
+
+function updateInscriptionCounter() {
+    const users = JSON.parse(localStorage.getItem('porra_users') || '[]');
+    const paidUsers = users.filter(u => u.paid).length;
+    const totalPlazas = 25;
+    
+    const countEl = document.getElementById('inscription-count');
+    const leftEl = document.getElementById('inscription-left');
+    
+    if (countEl) {
+        countEl.innerText = `${paidUsers}/${totalPlazas}`;
+    }
+    
+    if (leftEl) {
+        const remaining = totalPlazas - paidUsers;
+        if (remaining <= 0) {
+            leftEl.innerText = '¡Plazas agotadas!';
+            leftEl.classList.remove('text-blue-400');
+            leftEl.classList.add('text-red-400');
+        } else {
+            leftEl.innerText = `¡Quedan ${remaining} plazas!`;
+            leftEl.classList.add('text-blue-400');
+            leftEl.classList.remove('text-red-400');
+        }
+    }
+}
 
 // Cerrar Sesión
 const logoutButtons = document.querySelectorAll('#logout-btn, #user-logout-btn, #nav-logout-btn');
@@ -422,6 +636,8 @@ logoutButtons.forEach(btn => {
         if (userPanel) userPanel.classList.add('hidden');
         const userSection = document.getElementById('user-section');
         if (userSection) userSection.classList.add('hidden');
+        
+
         updateNavbarUI(null);
         
         // Ocultar sección de partido del día
@@ -434,7 +650,10 @@ logoutButtons.forEach(btn => {
 
 // 1. Cargar Partido del Día al iniciar la página
 document.addEventListener('DOMContentLoaded', () => {
-    loadActiveMOTD();
+    const isAdmin = localStorage.getItem('is_admin') === 'true';
+    if (!isAdmin) {
+        loadActiveMOTD();
+    }
 });
 
 function loadActiveMOTD() {
@@ -451,6 +670,12 @@ function loadActiveMOTD() {
 function showMOTDToUser(motd) {
     const section = document.getElementById('motd-user-section');
     if (!section) return;
+
+    const isAdmin = localStorage.getItem('is_admin') === 'true';
+    if (isAdmin) {
+        section.classList.add('hidden');
+        return;
+    }
 
     section.classList.remove('hidden');
     document.getElementById('user-motd-t1').innerText = motd.t1;
@@ -603,63 +828,128 @@ if (predictionForm) {
     });
 }
 
-// Modificar el login para mostrar el MOTD al entrar
-// Buscamos la parte del login donde se muestra el userPanel
+// --- Gestión de Exportación SQL (Admin) ---
+function initSqlExport() {
+    // Descargar SQL Usuarios
+    const downloadSqlBtn_el = document.getElementById('download-sql-btn');
+    if (downloadSqlBtn_el) {
+        downloadSqlBtn_el.addEventListener('click', () => {
+            const users = JSON.parse(localStorage.getItem('porra_users') || '[]');
+            
+            let sql = `/*\n`;
+            sql += `  ==========================================================================\n`;
+            sql += `  PORRA DEL MUNDIAL 2026 - BASE DE DATOS DE USUARIOS\n`;
+            sql += `  Fecha: ${new Date().toLocaleString()}\n`;
+            sql += `  ==========================================================================\n`;
+            sql += `*/\n\n`;
 
-// Descargar SQL Usuarios
-if (downloadSqlBtn) {
-    downloadSqlBtn.addEventListener('click', () => {
-        const users = JSON.parse(localStorage.getItem('porra_users') || '[]');
-        
-        let sql = `-- Usuarios de la Porra Mundial 2026\n`;
-        sql += `-- Generado el: ${new Date().toLocaleString()}\n\n`;
-        sql += `CREATE TABLE IF NOT EXISTS usuarios (\n`;
-        sql += `    id INTEGER PRIMARY KEY AUTOINCREMENT,\n`;
-        sql += `    username VARCHAR(100) NOT NULL,\n`;
-        sql += `    email VARCHAR(150) NOT NULL,\n`;
-        sql += `    password VARCHAR(255) NOT NULL,\n`;
-        sql += `    fecha_registro DATETIME,\n`;
-        sql += `    pagado VARCHAR(2) DEFAULT 'No'\n`;
-        sql += `);\n\n`;
-        
-        users.forEach(u => {
-            const cleanUser = u.username.replace(/'/g, "''");
-            const cleanEmail = u.email.replace(/'/g, "''");
-            const cleanPass = u.password.replace(/'/g, "''");
-            const paidText = u.paid ? 'Si' : 'No';
-            sql += `INSERT INTO usuarios (username, email, password, fecha_registro, pagado) VALUES ('${cleanUser}', '${cleanEmail}', '${cleanPass}', '${u.fecha}', '${paidText}');\n`;
-        });
-        
-        downloadFile(sql, 'usuarios.sql');
-    });
-}
-
-// Descargar SQL Pronósticos
-const downloadPredictionsBtn = document.getElementById('download-predictions-btn');
-if (downloadPredictionsBtn) {
-    downloadPredictionsBtn.addEventListener('click', () => {
-        const predictions = JSON.parse(localStorage.getItem('user_predictions') || '{}');
-        
-        let sql = `-- Pronósticos Diarios de la Porra Mundial 2026\n`;
-        sql += `-- Generado el: ${new Date().toLocaleString()}\n\n`;
-        sql += `CREATE TABLE IF NOT EXISTS pronosticos_diarios (\n`;
-        sql += `    id INTEGER PRIMARY KEY AUTOINCREMENT,\n`;
-        sql += `    username VARCHAR(100) NOT NULL,\n`;
-        sql += `    match_id VARCHAR(255) NOT NULL,\n`;
-        sql += `    sign VARCHAR(2) NOT NULL,\n`;
-        sql += `    fecha_pronostico DATETIME\n`;
-        sql += `);\n\n`;
-        
-        Object.keys(predictions).forEach(user => {
-            Object.values(predictions[user]).forEach(p => {
-                const cleanUser = user.replace(/'/g, "''");
-                const cleanMatch = p.matchId.replace(/'/g, "''");
-                sql += `INSERT INTO pronosticos_diarios (username, match_id, sign, fecha_pronostico) VALUES ('${cleanUser}', '${cleanMatch}', '${p.sign}', '${p.timestamp}');\n`;
+            sql += `CREATE TABLE IF NOT EXISTS usuarios (\n`;
+            sql += `    id INTEGER PRIMARY KEY AUTOINCREMENT,\n`;
+            sql += `    username VARCHAR(100) NOT NULL,\n`;
+            sql += `    email VARCHAR(150) NOT NULL,\n`;
+            sql += `    password VARCHAR(255) NOT NULL,\n`;
+            sql += `    fecha_registro DATETIME,\n`;
+            sql += `    pagado VARCHAR(2) DEFAULT 'No'\n`;
+            sql += `);\n\n`;
+            
+            users.forEach(u => {
+                const cleanUser = u.username.replace(/'/g, "''");
+                const cleanEmail = u.email.replace(/'/g, "''");
+                const cleanPass = u.password.replace(/'/g, "''");
+                const paidText = u.paid ? 'Si' : 'No';
+                sql += `INSERT INTO usuarios (username, email, password, fecha_registro, pagado) VALUES ('${cleanUser}', '${cleanEmail}', '${cleanPass}', '${u.fecha}', '${paidText}');\n`;
             });
+            
+            downloadFile(sql, 'usuarios.sql');
         });
-        
-        downloadFile(sql, 'pronostico_diario.sql');
-    });
+    }
+
+    // Descargar SQL Pronósticos Diarios
+    const downloadPredictionsBtn = document.getElementById('download-predictions-btn');
+    if (downloadPredictionsBtn) {
+        downloadPredictionsBtn.addEventListener('click', () => {
+            const predictions = JSON.parse(localStorage.getItem('user_predictions') || '{}');
+            
+            let sql = `/*\n`;
+            sql += `  ==========================================================================\n`;
+            sql += `  PORRA DEL MUNDIAL 2026 - PRONÓSTICOS DIARIOS\n`;
+            sql += `  Fecha: ${new Date().toLocaleString()}\n`;
+            sql += `  ==========================================================================\n`;
+            sql += `*/\n\n`;
+
+            sql += `CREATE TABLE IF NOT EXISTS pronosticos_diarios (\n`;
+            sql += `    id INTEGER PRIMARY KEY AUTOINCREMENT,\n`;
+            sql += `    username VARCHAR(100) NOT NULL,\n`;
+            sql += `    match_id VARCHAR(255) NOT NULL,\n`;
+            sql += `    sign VARCHAR(2) NOT NULL,\n`;
+            sql += `    fecha_pronostico DATETIME\n`;
+            sql += `);\n\n`;
+            
+            Object.keys(predictions).forEach(user => {
+                Object.values(predictions[user]).forEach(p => {
+                    const cleanUser = user.replace(/'/g, "''");
+                    const cleanMatch = p.matchId.replace(/'/g, "''");
+                    sql += `INSERT INTO pronosticos_diarios (username, match_id, sign, fecha_pronostico) VALUES ('${cleanUser}', '${cleanMatch}', '${p.sign}', '${p.timestamp}');\n`;
+                });
+            });
+            
+            downloadFile(sql, 'pronostico_diario.sql');
+        });
+    }
+
+    // Descargar SQL Porras (Grupos)
+    const downloadPorrasBtn = document.getElementById('download-porras-btn');
+    if (downloadPorrasBtn) {
+        downloadPorrasBtn.addEventListener('click', () => {
+            const porraPredictions = JSON.parse(localStorage.getItem('porra_predictions') || '{}');
+            
+            let sql = `/*\n`;
+            sql += `  ==========================================================================\n`;
+            sql += `  PORRA DEL MUNDIAL 2026 - EXPORTACIÓN DE GRUPOS\n`;
+            sql += `  Fecha: ${new Date().toLocaleString()}\n`;
+            sql += `  ==========================================================================\n`;
+            sql += `*/\n\n`;
+
+            sql += `CREATE TABLE IF NOT EXISTS porras (\n`;
+            sql += `    id INTEGER PRIMARY KEY AUTOINCREMENT,\n`;
+            sql += `    username VARCHAR(100) NOT NULL,\n`;
+            sql += `    grupo VARCHAR(5) NOT NULL,\n`;
+            sql += `    p1 VARCHAR(100),\n`;
+            sql += `    p2 VARCHAR(100),\n`;
+            sql += `    p3 VARCHAR(100),\n`;
+            sql += `    detalle_texto TEXT,\n`;
+            sql += `    fecha_creacion DATETIME\n`;
+            sql += `);\n\n`;
+            
+            sql += `-- INICIO DE INSERCIONES\n\n`;
+
+            Object.keys(porraPredictions).forEach(user => {
+                const userPicks = porraPredictions[user];
+                sql += `-- Pronósticos de: ${user}\n`;
+                
+                Object.keys(groups).forEach(group => {
+                    const p1 = userPicks[`group-${group}-pos-1`] || '';
+                    const p2 = userPicks[`group-${group}-pos-2`] || '';
+                    const p3 = userPicks[`group-${group}-pos-3`] || '';
+                    
+                    if (p1 || p2 || p3) {
+                        const cleanUser = user.replace(/'/g, "''");
+                        const cleanP1 = p1.replace(/'/g, "''");
+                        const cleanP2 = p2.replace(/'/g, "''");
+                        const cleanP3 = p3.replace(/'/g, "''");
+                        const detalle = `Grupo ${group} puesto 1: ${cleanP1} /* ${cleanP2} /* ${cleanP3}`;
+                        const fecha = new Date().toISOString().slice(0, 19).replace('T', ' ');
+                        
+                        sql += `INSERT INTO porras (username, grupo, p1, p2, p3, detalle_texto, fecha_creacion) VALUES ('${cleanUser}', '${group}', '${cleanP1}', '${cleanP2}', '${cleanP3}', '${detalle}', '${fecha}');\n`;
+                    }
+                });
+                sql += `\n`;
+            });
+            
+            sql += `-- FIN DE EXPORTACIÓN\n`;
+            downloadFile(sql, 'porras.sql');
+        });
+    }
 }
 
 function downloadFile(content, fileName) {
@@ -672,6 +962,35 @@ function downloadFile(content, fileName) {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+}
+
+// Exportación SQL Fase 2 y 3 desde el panel principal
+function downloadSQLFase2() {
+    // Nota: Como estamos en index.html, los datos reales de Fase 2 estarían en localStorage
+    // Si no hay datos guardados aún, exportamos una estructura básica.
+    const picks = JSON.parse(localStorage.getItem('fase2_picks') || '[]');
+    
+    let sql = `/* EXPORTACIÓN FASE 2 - CUADRO */\n`;
+    sql += `CREATE TABLE IF NOT EXISTS pronosticos_fase2 (id INT AUTO_INCREMENT PRIMARY KEY, equipo_ganador VARCHAR(100), partido_id VARCHAR(50));\n`;
+    
+    if (picks.length > 0) {
+        const values = picks.map(p => `('${p.team}', '${p.matchId}')`).join(',\n');
+        sql += `INSERT INTO pronosticos_fase2 (equipo_ganador, partido_id) VALUES \n${values};`;
+    } else {
+        sql += `-- No se encontraron pronósticos guardados en el navegador para la Fase 2.\n`;
+    }
+    
+    downloadFile(sql, 'pronosticos_fase2_dashboard.sql');
+}
+
+function downloadSQLFase3() {
+    const score = JSON.parse(localStorage.getItem('fase3_score') || '{"a": 0, "b": 0}');
+    
+    let sql = `/* EXPORTACIÓN FASE 3 - FINAL */\n`;
+    sql += `CREATE TABLE IF NOT EXISTS pronosticos_fase3 (id INT AUTO_INCREMENT PRIMARY KEY, goles_local INT, goles_visitante INT);\n`;
+    sql += `INSERT INTO pronosticos_fase3 (goles_local, goles_visitante) VALUES (${score.a}, ${score.b});`;
+    
+    downloadFile(sql, 'pronosticos_fase3_dashboard.sql');
 }
 
 // Datos de Grupos y Equipos
@@ -1295,11 +1614,7 @@ function changeJornada(jornada) {
     }
 }
 
-// Inicializar al cargar la página
-document.addEventListener('DOMContentLoaded', () => {
-    renderMatches(1);
-    updateInscriptionCounter();
-});
+// (EventListener movido al final para consolidación)
 
 // --- IA de Predicción Realista ---
 
@@ -1419,8 +1734,8 @@ function injectAIButton() {
         <div id="ai-result" class="hidden mt-4 animate-in fade-in zoom-in duration-300">
             <div class="grid grid-cols-3 gap-2 mb-4">
                 <div class="bg-slate-900 p-2 rounded-lg text-center border border-slate-800">
-                    <div id="ai-p1" class="text-lg font-black text-white">0%</div>
-                    <div class="text-[8px] text-slate-500 uppercase">Local</div>
+                    <h5 class="text-white font-bold text-sm">Porra Mundial 2026 🏆</h5>
+                    <p id="whatsapp-status" class="text-[10px] text-slate-400">Administrador</p>
                 </div>
                 <div class="bg-slate-900 p-2 rounded-lg text-center border border-slate-800">
                     <div id="ai-px" class="text-lg font-black text-white">0%</div>
@@ -1457,36 +1772,247 @@ function injectAIButton() {
     });
 }
 
+// Función para sembrar datos iniciales (20 usuarios con porras y pagados)
+function seedUsers() {
+    // Si ya sembramos con la nueva versión, no repetir
+    if (localStorage.getItem('data_seeded_v2')) return;
+
+    let users = JSON.parse(localStorage.getItem('porra_users') || '[]');
+    let allPredictions = JSON.parse(localStorage.getItem('porra_predictions') || '{}');
+    
+    // Limpiar usuarios antiguos con espacios o nombres genéricos para renovar
+    users = users.filter(u => !u.username.includes(' ') && u.username !== 'Usuario');
+
+    const mockUsers = [
+        "AstroGoal", "CyberStriker", "PixelFan", "GoalMaster26", "RetroKicker",
+        "TurboForward", "MegaDefensor", "UltraFanatic", "NeonWinner", "GamerX_Fut",
+        "QuantumKeeper", "SonicScorer", "VortexVanguard", "ShadowStriker", "AlphaBaller",
+        "ZenZealot", "NovaNomad", "TitanTactician", "OrbitOffensive", "ApexAce"
+    ];
+
+    mockUsers.forEach((name) => {
+        if (!users.some(u => u.username === name)) {
+            const newUser = {
+                username: name,
+                email: `${name.toLowerCase().replace(/[^a-z0-9]/g, '')}@example.com`,
+                password: "123",
+                fecha: new Date().toISOString().slice(0, 19).replace('T', ' '),
+                paid: true
+            };
+            users.push(newUser);
+
+            // Generar predicciones aleatorias pero realistas para este usuario
+            const userPicks = {};
+            Object.keys(groups).forEach(group => {
+                const teams = [...groups[group]];
+                // Mezclar y elegir 3
+                const shuffled = teams.sort(() => 0.5 - Math.random());
+                userPicks[`group-${group}-pos-1`] = shuffled[0].name;
+                userPicks[`group-${group}-pos-2`] = shuffled[1].name;
+                userPicks[`group-${group}-pos-3`] = shuffled[2].name;
+            });
+            allPredictions[name] = userPicks;
+        }
+    });
+
+    localStorage.setItem('porra_users', JSON.stringify(users));
+    localStorage.setItem('porra_predictions', JSON.stringify(allPredictions));
+    localStorage.setItem('data_seeded_v2', 'true');
+    
+    // Actualizar UI
+    updateInscriptionCounter();
+}
+
+// --- Lógica de Clasificación en Tiempo Real ---
+
+// Resultados Oficiales Simulados (Para cálculo de puntos)
+const officialResults = {
+    'A': [],
+    'B': [],
+    'C': [],
+    'D': [],
+    'E': [],
+    'F': [],
+    'G': [],
+    'H': [],
+    'I': [],
+    'J': [],
+    'K': [],
+    'L': []
+};
+
+function calculateUserPoints(username) {
+    const allPredictions = JSON.parse(localStorage.getItem('porra_predictions') || '{}');
+    const userPicks = allPredictions[username];
+    if (!userPicks) return 0;
+
+    let totalPoints = 0;
+
+    Object.keys(officialResults).forEach(group => {
+        const result = officialResults[group];
+        const p1 = userPicks[`group-${group}-pos-1`];
+        const p2 = userPicks[`group-${group}-pos-2`];
+        const p3 = userPicks[`group-${group}-pos-3`];
+
+        // 1. Puntos por Top 3 (1 punto si el equipo está en el top 3 real)
+        if (result.includes(p1)) totalPoints += 1;
+        if (result.includes(p2)) totalPoints += 1;
+        if (result.includes(p3)) totalPoints += 1;
+
+        // 2. Puntos Extra por Posición Exacta (+2 puntos adicionales)
+        if (p1 === result[0]) totalPoints += 2;
+        if (p2 === result[1]) totalPoints += 2;
+        if (p3 === result[2]) totalPoints += 2;
+    });
+
+    return totalPoints;
+}
+
+function renderStandings() {
+    const standingsTable = document.getElementById('standings-body');
+    if (!standingsTable) return;
+
+    const users = JSON.parse(localStorage.getItem('porra_users') || '[]');
+    
+    // Calcular puntos para cada usuario
+    const leaderboard = users.map(user => {
+        return {
+            username: user.username,
+            points: calculateUserPoints(user.username),
+            isPaid: user.paid
+        };
+    });
+
+    // Ordenar por puntos (Descendente)
+    leaderboard.sort((a, b) => b.points - a.points);
+
+    // Renderizar filas
+    standingsTable.innerHTML = '';
+    leaderboard.forEach((entry, index) => {
+        const isCurrentPlayer = entry.username === localStorage.getItem('logged_user');
+        const row = document.createElement('tr');
+        row.className = `border-b border-slate-800/50 hover:bg-white/5 transition-colors ${isCurrentPlayer ? 'bg-brand-green/10' : ''}`;
+        
+        row.innerHTML = `
+            <td class="py-4 px-6 text-center">
+                <span class="inline-flex items-center justify-center w-8 h-8 rounded-full ${index < 3 ? 'bg-brand-gold text-slate-900 font-black' : 'text-slate-500 font-bold'}">
+                    ${index + 1}
+                </span>
+            </td>
+            <td class="py-4 px-6">
+                <div class="flex items-center">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center mr-3 text-[10px] font-bold text-slate-400">
+                        ${entry.username.substring(0, 2).toUpperCase()}
+                    </div>
+                    <div>
+                        <div class="font-bold text-white flex items-center">
+                            ${entry.username}
+                            ${isCurrentPlayer ? '<span class="ml-2 text-[8px] bg-brand-green text-white px-1.5 py-0.5 rounded-full uppercase">Tú</span>' : ''}
+                        </div>
+                        <div class="text-[10px] ${entry.isPaid ? 'text-brand-green' : 'text-red-400'} uppercase font-black">
+                            ${entry.isPaid ? 'Inscrito' : 'Pendiente'}
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td class="py-4 px-6 text-right">
+                <div class="text-xl font-black text-white">${entry.points}</div>
+                <div class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Puntos</div>
+            </td>
+        `;
+        standingsTable.appendChild(row);
+    });
+}
+
 // Inicializar al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
+    // Inicializar Cuadro Eliminatorio PRIMERO para asegurar renderizado
+    try {
+        if (document.getElementById('col-L-1')) {
+            console.log("Iniciando renderizado de cuadro...");
+            renderSide('L');
+            renderSide('R');
+        }
+    } catch (e) {
+        console.error("Error renderizando el cuadro:", e);
+    }
+
     renderMatches(1);
+    seedUsers(); // Sembrar usuarios con nombres variados
     updateInscriptionCounter();
+    initSqlExport(); // Inicializar botones de exportación
+    renderStandings(); // Renderizar clasificación inicial
 });
 
-// Función para actualizar el contador de participantes (basado en pagos reales)
-function updateInscriptionCounter() {
-    const users = JSON.parse(localStorage.getItem('porra_users') || '[]');
-    const localPaidCount = users.filter(u => u.paid).length;
-    
-    // La base empieza en 0 como solicitó el usuario
-    const totalPaid = localPaidCount;
-    const maxSlots = 25;
-    
-    const countEl = document.getElementById('inscription-count');
-    const leftEl = document.getElementById('inscription-left');
-    
-    if (countEl) {
-        countEl.innerText = `${totalPaid}/${maxSlots}`;
-    }
-    
-    if (leftEl) {
-        const left = maxSlots - totalPaid;
-        if (left > 0) {
-            leftEl.innerText = `¡Quedan ${left} plazas!`;
-            leftEl.className = "text-sm font-medium text-blue-400";
-        } else {
-            leftEl.innerText = "Plazas cerradas";
-            leftEl.className = "text-sm font-medium text-red-400 animate-pulse";
-        }
+// --- WhatsApp Simulation ---
+function openWhatsAppSimulation() {
+    const modal = document.getElementById('whatsapp-modal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        startWhatsAppSimulation();
     }
 }
+
+function closeWhatsAppSimulation() {
+    const modal = document.getElementById('whatsapp-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+}
+
+async function startWhatsAppSimulation() {
+    const chatArea = document.getElementById('whatsapp-chat-area');
+    const status = document.getElementById('whatsapp-status');
+    if (!chatArea || !status) return;
+
+    // Obtener número real de usuarios pagados
+    const users = JSON.parse(localStorage.getItem('porra_users') || '[]');
+    const paidCount = users.filter(u => u.paid).length;
+
+    const messages = [
+        { sender: 'Administrador', color: 'text-brand-green', text: '¡Bienvenidos a todos! ⚽ Este es el canal oficial de la Porra Mundial 2026.', time: '14:20' },
+        { sender: 'Administrador', color: 'text-brand-green', text: 'Recuerden que para validar su inscripción deben realizar el pago por Bizum y enviar el comprobante.', time: '14:22' },
+        { sender: 'Administrador', color: 'text-brand-green', text: 'Normas del Grupo:\n• Solo se permiten pronósticos en el formato oficial.\n• Respeto absoluto entre competidores.\n• Las decisiones del admin son inapelables.', time: '14:25', isRules: true },
+        { sender: 'Administrador', color: 'text-brand-green', text: `¡Ya somos ${paidCount} participantes oficiales! 🏃‍♂️💨 Las plazas vuelan. ¡No te quedes fuera!`, time: '14:30' }
+    ];
+
+    chatArea.innerHTML = `
+        <div class="flex justify-center mb-4">
+            <span class="bg-[#182229] text-[10px] text-[#8696a0] px-3 py-1 rounded-lg shadow-sm">
+                LOS MENSAJES ESTÁN CIFRADOS DE EXTREMO A EXTREMO
+            </span>
+        </div>
+    `;
+
+    for (const msg of messages) {
+        status.innerText = 'Escribiendo...';
+        await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 500));
+        
+        status.innerText = 'Administrador';
+        
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'flex flex-col items-start max-w-[85%] animate-in slide-in-from-bottom-2 duration-300';
+        
+        const innerHTML = `
+            <div class="bg-[#202c33] p-2 rounded-lg rounded-tl-none shadow-sm relative ${msg.isRules ? 'border-l-4 border-brand-gold' : ''}">
+                <span class="${msg.color} text-[10px] font-bold block mb-1">${msg.sender}</span>
+                <p class="text-white text-xs leading-relaxed ${msg.isRules ? 'italic' : ''}">
+                    ${msg.text.replace(/\n/g, '<br>')}
+                </p>
+                <div class="flex items-center justify-end space-x-1 mt-1">
+                    <span class="text-[9px] text-slate-400">${msg.time}</span>
+                    <svg class="w-3 h-3 text-blue-400" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+                </div>
+            </div>
+        `;
+        
+        msgDiv.innerHTML = innerHTML;
+        chatArea.appendChild(msgDiv);
+        chatArea.scrollTop = chatArea.scrollHeight;
+        
+        await new Promise(resolve => setTimeout(resolve, 400));
+    }
+}
+

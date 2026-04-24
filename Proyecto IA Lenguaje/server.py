@@ -44,6 +44,11 @@ class PorraHandler(http.server.SimpleHTTPRequestHandler):
                 file_exists = os.path.exists(SQL_FILE)
                 with open(SQL_FILE, 'a', encoding='utf-8') as f:
                     if not file_exists:
+                        f.write("/*\n")
+                        f.write("  ==========================================================================\n")
+                        f.write("  PORRA DEL MUNDIAL 2026 - BASE DE DATOS DE USUARIOS\n")
+                        f.write("  ==========================================================================\n")
+                        f.write("*/\n\n")
                         f.write("CREATE TABLE IF NOT EXISTS usuarios (\n")
                         f.write("    id INTEGER PRIMARY KEY AUTOINCREMENT,\n")
                         f.write("    username VARCHAR(100) NOT NULL,\n")
@@ -59,7 +64,7 @@ class PorraHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_header('Content-type', 'application/json')
                 self._send_cors_headers()
                 self.end_headers()
-                self.wfile.write(b'{"success": true, "message": "Usuario registrado y SQL guardado"}')
+                self.wfile.write('{"success": true, "message": "Usuario registrado y SQL guardado"}'.encode('utf-8'))
             
             except Exception as e:
                 self.send_response(500)
@@ -81,7 +86,7 @@ class PorraHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_header('Content-type', 'application/json')
                 self._send_cors_headers()
                 self.end_headers()
-                self.wfile.write(b'{"success": true, "message": "Partido del día guardado"}')
+                self.wfile.write('{"success": true, "message": "Partido del día guardado"}'.encode('utf-8'))
             except Exception as e:
                 self.send_response(500)
                 self._send_cors_headers()
@@ -107,6 +112,11 @@ class PorraHandler(http.server.SimpleHTTPRequestHandler):
                 
                 with open(sql_file, 'a', encoding='utf-8') as f:
                     if not file_exists:
+                        f.write("/*\n")
+                        f.write("  ==========================================================================\n")
+                        f.write("  PORRA DEL MUNDIAL 2026 - PRONÓSTICOS DIARIOS\n")
+                        f.write("  ==========================================================================\n")
+                        f.write("*/\n\n")
                         f.write("CREATE TABLE IF NOT EXISTS pronosticos_diarios (\n")
                         f.write("    id INTEGER PRIMARY KEY AUTOINCREMENT,\n")
                         f.write("    username VARCHAR(100) NOT NULL,\n")
@@ -120,7 +130,61 @@ class PorraHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_header('Content-type', 'application/json')
                 self._send_cors_headers()
                 self.end_headers()
-                self.wfile.write(b'{"success": true, "message": "Pronóstico guardado en SQL"}')
+                self.wfile.write('{"success": true, "message": "Pronóstico guardado en SQL"}'.encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self._send_cors_headers()
+                self.end_headers()
+                self.wfile.write(f'{{"error": "{str(e)}" }}'.encode())
+        
+        elif self.path == '/api/save_porra':
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length)
+            
+            try:
+                data = json.loads(post_data.decode('utf-8'))
+                username = data.get('username', '').replace("'", "''")
+                predictions = data.get('predictions', [])
+                
+                sql_file = 'porras.sql'
+                file_exists = os.path.exists(sql_file)
+                
+                with open(sql_file, 'a', encoding='utf-8') as f:
+                    if not file_exists:
+                        f.write("/*\n")
+                        f.write("  ==========================================================================\n")
+                        f.write("  PORRA DEL MUNDIAL 2026 - EXPORTACIÓN DE GRUPOS (SERVER-SIDE)\n")
+                        f.write("  ==========================================================================\n")
+                        f.write("*/\n\n")
+                        f.write("CREATE TABLE IF NOT EXISTS porras (\n")
+                        f.write("    id INTEGER PRIMARY KEY AUTOINCREMENT,\n")
+                        f.write("    username VARCHAR(100) NOT NULL,\n")
+                        f.write("    grupo VARCHAR(5) NOT NULL,\n")
+                        f.write("    p1 VARCHAR(100),\n")
+                        f.write("    p2 VARCHAR(100),\n")
+                        f.write("    p3 VARCHAR(100),\n")
+                        f.write("    detalle_texto TEXT,\n")
+                        f.write("    fecha_creacion DATETIME\n")
+                        f.write(");\n\n")
+                    
+                    fecha = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    f.write(f"-- Entrada de {username} ({fecha})\n")
+                    for p in predictions:
+                        group = p.get('group', '').replace("'", "''")
+                        p1 = p.get('p1', '').replace("'", "''")
+                        p2 = p.get('p2', '').replace("'", "''")
+                        p3 = p.get('p3', '').replace("'", "''")
+                        # Formato solicitado por el usuario: grupo A puesto 1 /* nombre del pais 2/*nombre del pais 3
+                        detalle = f"Grupo {group} puesto 1: {p1} /* {p2} /* {p3}"
+                        
+                        sql_statement = f"INSERT INTO porras (username, grupo, p1, p2, p3, detalle_texto, fecha_creacion) VALUES ('{username}', '{group}', '{p1}', '{p2}', '{p3}', '{detalle}', '{fecha}');\n"
+                        f.write(sql_statement)
+                
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self._send_cors_headers()
+                self.end_headers()
+                self.wfile.write('{"success": true, "message": "Porra guardada en SQL"}'.encode('utf-8'))
             except Exception as e:
                 self.send_response(500)
                 self._send_cors_headers()

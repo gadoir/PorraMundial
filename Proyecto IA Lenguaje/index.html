@@ -154,25 +154,112 @@
                     <p class="text-slate-400 mb-8">Has iniciado sesión como administrador. Desde aquí puedes gestionar
                         la base de datos.</p>
 
-                    <div class="flex flex-col space-y-3 mt-8 max-w-xs mx-auto">
-                        <button id="download-sql-btn"
-                            class="inline-flex items-center justify-center space-x-3 bg-white text-slate-950 font-black uppercase tracking-widest py-4 px-6 rounded-2xl hover:bg-brand-gold transition-all transform hover:scale-105 shadow-xl">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                            </svg>
-                            <span class="text-xs">Usuarios.sql</span>
-                        </button>
+                    <div class="mt-12 text-left">
+                        <h3 class="text-xl font-bold text-white mb-6 flex items-center">
+                            <span class="w-2 h-6 bg-brand-gold mr-3 rounded-full"></span>
+                            Exportación de Datos (SQL)
+                        </h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <!-- Usuarios Card -->
+                            <div
+                                class="bg-slate-900/50 p-6 rounded-3xl border border-slate-700 hover:border-brand-gold transition-all group flex flex-col h-full">
+                                <div
+                                    class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center mb-4 text-white group-hover:bg-brand-gold group-hover:text-slate-950 transition-all transform group-hover:rotate-6">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
+                                        </path>
+                                    </svg>
+                                </div>
+                                <h4 class="text-white font-bold mb-1">Base de Usuarios</h4>
+                                <p class="text-slate-500 text-[10px] mb-6 flex-grow">Lista completa de participantes,
+                                    emails y estado de pago.</p>
+                                <button id="download-sql-btn"
+                                    class="w-full py-3 bg-white text-slate-950 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-brand-gold transition-colors shadow-lg">
+                                    Descargar SQL
+                                </button>
+                            </div>
 
-                        <button id="download-predictions-btn"
-                            class="inline-flex items-center justify-center space-x-3 bg-brand-green text-white font-black uppercase tracking-widest py-4 px-6 rounded-2xl hover:bg-brand-greenHover transition-all transform hover:scale-105 shadow-xl">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 17v-2a4 4 0 00-4-4H5m11 4h2a2 2 0 002-2v-3a2 2 0 00-2-2H5a2 2 0 00-2 2v3a2 2 0 002 2h2m7-2a2 2 0 11-4 0 2 2 0 014 0z">
-                                </path>
-                            </svg>
-                            <span class="text-xs">Pronosticos.sql</span>
-                        </button>
+                            <!-- Pronósticos Diarios Card -->
+                            <div
+                                class="bg-slate-900/50 p-6 rounded-3xl border border-slate-700 hover:border-brand-green transition-all group flex flex-col h-full">
+                                <div
+                                    class="w-12 h-12 rounded-2xl bg-brand-green/10 flex items-center justify-center mb-4 text-brand-green group-hover:bg-brand-green group-hover:text-white transition-all transform group-hover:rotate-6">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4">
+                                        </path>
+                                    </svg>
+                                </div>
+                                <h4 class="text-white font-bold mb-1">Pronósticos Diarios</h4>
+                                <p class="text-slate-500 text-[10px] mb-6 flex-grow">Resultados 1X2 del "Partido del
+                                    Día" recolectados hasta hoy.</p>
+                                <button id="download-predictions-btn"
+                                    class="w-full py-3 bg-brand-green text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-brand-greenHover transition-colors shadow-lg shadow-brand-green/20">
+                                    Descargar SQL
+                                </button>
+                            </div>
+
+                            <!-- La Porra (Grupos) Card -->
+                            <div
+                                class="bg-slate-900/50 p-6 rounded-3xl border border-slate-700 hover:border-purple-500 transition-all group flex flex-col h-full">
+                                <div
+                                    class="w-12 h-12 rounded-2xl bg-purple-500/10 flex items-center justify-center mb-4 text-purple-400 group-hover:bg-purple-500 group-hover:text-white transition-all transform group-hover:rotate-6">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
+                                        </path>
+                                    </svg>
+                                </div>
+                                <h4 class="text-white font-bold mb-1">La Porra (Grupos)</h4>
+                                <p class="text-slate-500 text-[10px] mb-6 flex-grow">Predicciones de clasificación de
+                                    los 12 grupos del Mundial.</p>
+                                <button id="download-porras-btn"
+                                    class="w-full py-3 bg-purple-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-purple-700 transition-colors shadow-lg shadow-purple-500/20">
+                                    Descargar SQL
+                                </button>
+                            </div>
+
+                            <!-- La Porra (Cuadro - Fase 2) Card -->
+                            <div
+                                class="bg-slate-900/50 p-6 rounded-3xl border border-slate-700 hover:border-purple-400 transition-all group flex flex-col h-full">
+                                <div
+                                    class="w-12 h-12 rounded-2xl bg-purple-500/10 flex items-center justify-center mb-4 text-purple-400 group-hover:bg-purple-500 group-hover:text-white transition-all transform group-hover:rotate-6">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4">
+                                        </path>
+                                    </svg>
+                                </div>
+                                <h4 class="text-white font-bold mb-1">SQL Fase 2 (Cuadro)</h4>
+                                <p class="text-slate-500 text-[10px] mb-6 flex-grow">Exportar todos los pronósticos del
+                                    cuadro eliminatorio.</p>
+                                <button onclick="downloadSQLFase2()"
+                                    class="w-full py-3 bg-slate-800 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-purple-600 transition-colors shadow-lg">
+                                    Descargar SQL
+                                </button>
+                            </div>
+
+                            <!-- La Porra (Final - Fase 3) Card -->
+                            <div
+                                class="bg-slate-900/50 p-6 rounded-3xl border border-slate-700 hover:border-brand-gold transition-all group flex flex-col h-full">
+                                <div
+                                    class="w-12 h-12 rounded-2xl bg-brand-gold/10 flex items-center justify-center mb-4 text-brand-gold group-hover:bg-brand-gold group-hover:text-white transition-all transform group-hover:rotate-6">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4">
+                                        </path>
+                                    </svg>
+                                </div>
+                                <h4 class="text-white font-bold mb-1">SQL Fase 3 (Final)</h4>
+                                <p class="text-slate-500 text-[10px] mb-6 flex-grow">Exportar los resultados previstos
+                                    para la Gran Final.</p>
+                                <button onclick="downloadSQLFase3()"
+                                    class="w-full py-3 bg-slate-800 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-brand-gold hover:text-slate-950 transition-colors shadow-lg">
+                                    Descargar SQL
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     <button id="logout-btn"
@@ -264,100 +351,184 @@
                         </div>
                     </div>
 
-                    <!-- Botón para ir a pronósticos (Solo si ha pagado) -->
-                    <div id="user-cta-container" class="hidden animate-in fade-in slide-in-from-bottom-4 duration-700">
-                        <a href="pronosticos.html"
-                            class="inline-flex items-center space-x-3 bg-brand-green hover:bg-brand-green/90 text-white font-black uppercase tracking-widest py-4 px-10 rounded-2xl shadow-xl transform transition-all hover:scale-105 active:scale-95">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
-                                </path>
-                            </svg>
-                            <span>Crear mi Porra</span>
-                        </a>
-                        <p class="text-slate-500 text-xs mt-4 italic">Elige los 1º, 2º y 3º puestos de cada grupo.</p>
-                    </div>
-
-                    <button id="user-logout-btn"
-                        class="block mx-auto mt-8 text-slate-500 hover:text-white text-sm font-bold uppercase tracking-wider transition-colors">
-                        Cerrar Sesión
-                    </button>
-
-                    <!-- Sección Partido del Día (Usuario) -->
-                    <div id="motd-user-section"
-                        class="mt-10 pt-10 border-t border-slate-700/50 text-left hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
-                        <h3 class="text-xl font-bold text-white mb-6 flex items-center justify-center">
-                            <span class="flex h-3 w-3 rounded-full bg-purple-500 mr-3 animate-pulse"></span>
-                            Tu Pronóstico: Partido del Día
-                        </h3>
-
+                    <!-- Botones para ir a pronósticos (Solo si ha pagado) -->
+                    <div id="user-cta-container"
+                        class="hidden grid grid-cols-1 lg:grid-cols-3 gap-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                        <!-- Fase 1: Grupos -->
                         <div
-                            class="bg-slate-900/80 p-6 rounded-3xl border border-purple-500/30 relative overflow-hidden">
-                            <div class="absolute top-0 right-0 p-2">
-                                <span id="motd-user-datetime"
-                                    class="text-[10px] font-bold text-purple-400 uppercase bg-purple-500/10 px-2 py-1 rounded-md"></span>
+                            class="bg-slate-900/50 p-6 rounded-3xl border border-slate-700 hover:border-brand-green transition-all group">
+                            <div
+                                class="w-12 h-12 rounded-2xl bg-brand-green/10 flex items-center justify-center mb-4 text-brand-green group-hover:bg-brand-green group-hover:text-white transition-all">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                    </path>
+                                </svg>
                             </div>
+                            <h4 class="text-white font-bold mb-1">Fase 1: Grupos</h4>
+                            <p class="text-slate-500 text-[10px] mb-6">Selecciona los 3 mejores de cada grupo.</p>
+                            <a href="pronosticos.html"
+                                class="block w-full text-center bg-brand-green hover:bg-brand-greenHover text-white font-black uppercase tracking-widest py-3 rounded-xl shadow-lg shadow-brand-green/20 transition-all transform hover:scale-[1.02]">
+                                Entrar
+                            </a>
+                        </div>
 
-                            <div class="flex justify-between items-center mb-8 px-4">
-                                <div class="text-center w-1/3">
-                                    <div id="user-motd-t1" class="text-lg font-black text-white mb-1"></div>
-                                    <div class="text-[10px] text-slate-500 uppercase font-bold">Local</div>
-                                </div>
+                        <!-- Fase 2: Cuadro (BLOQUEADA - Diseño mejorado) -->
+                        <div
+                            class="bg-slate-900/50 p-6 rounded-3xl border border-slate-700/50 relative overflow-hidden group">
+                            <!-- Overlay de Candado -->
+                            <div
+                                class="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px] z-20 flex flex-col items-center justify-center transition-all group-hover:backdrop-blur-[1px]">
                                 <div
-                                    class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-br from-brand-gold to-orange-500">
-                                    VS</div>
-                                <div class="text-center w-1/3">
-                                    <div id="user-motd-t2" class="text-lg font-black text-white mb-1"></div>
-                                    <div class="text-[10px] text-slate-500 uppercase font-bold">Visitante</div>
+                                    class="w-12 h-12 rounded-full bg-brand-gold/20 border border-brand-gold/50 flex items-center justify-center text-brand-gold shadow-lg mb-2">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+                                        </path>
+                                    </svg>
                                 </div>
+                                <span
+                                    class="text-[10px] font-black text-brand-gold uppercase tracking-[0.2em]">Bloqueado</span>
                             </div>
 
-                            <form id="prediction-form" class="space-y-6">
-                                <p class="text-center text-slate-400 text-sm">¿Quién ganará este encuentro?</p>
-
-                                <div class="grid grid-cols-3 gap-3">
-                                    <label class="relative group cursor-pointer">
-                                        <input type="radio" name="sign" value="1" required class="peer sr-only">
-                                        <div
-                                            class="bg-slate-800 border-2 border-slate-700 p-4 rounded-xl text-center transition-all peer-checked:border-purple-500 peer-checked:bg-purple-500/20">
-                                            <div class="font-black text-xl text-white">1</div>
-                                            <div class="text-[10px] text-slate-500 uppercase font-bold mt-1">Local</div>
-                                        </div>
-                                    </label>
-                                    <label class="relative group cursor-pointer">
-                                        <input type="radio" name="sign" value="X" required class="peer sr-only">
-                                        <div
-                                            class="bg-slate-800 border-2 border-slate-700 p-4 rounded-xl text-center transition-all peer-checked:border-purple-500 peer-checked:bg-purple-500/20">
-                                            <div class="font-black text-xl text-white">X</div>
-                                            <div class="text-[10px] text-slate-500 uppercase font-bold mt-1">Empate
-                                            </div>
-                                        </div>
-                                    </label>
-                                    <label class="relative group cursor-pointer">
-                                        <input type="radio" name="sign" value="2" required class="peer sr-only">
-                                        <div
-                                            class="bg-slate-800 border-2 border-slate-700 p-4 rounded-xl text-center transition-all peer-checked:border-purple-500 peer-checked:bg-purple-500/20">
-                                            <div class="font-black text-xl text-white">2</div>
-                                            <div class="text-[10px] text-slate-500 uppercase font-bold mt-1">Visitante
-                                            </div>
-                                        </div>
-                                    </label>
+                            <div class="relative z-10 opacity-40">
+                                <div
+                                    class="w-12 h-12 rounded-2xl bg-purple-500/10 flex items-center justify-center mb-4 text-purple-400">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                                        </path>
+                                    </svg>
                                 </div>
+                                <h4 class="text-white font-bold mb-1">Fase 2: Cuadro</h4>
+                                <p class="text-slate-500 text-[10px] mb-6">Disponible tras la fase de grupos.</p>
+                                <div
+                                    class="w-full text-center bg-slate-800/50 text-slate-500 font-black uppercase tracking-widest py-3 rounded-xl">
+                                    Cerrado
+                                </div>
+                            </div>
+                        </div>
 
-                                <button type="submit" id="submit-prediction-btn"
-                                    class="w-full bg-purple-600 hover:bg-purple-500 text-white font-black uppercase tracking-widest py-4 rounded-xl shadow-lg shadow-purple-500/20 transition-all transform hover:-translate-y-1">
-                                    Enviar Pronóstico
-                                </button>
-                            </form>
+                        <!-- Fase 3: Gran Final (BLOQUEADA - Diseño mejorado) -->
+                        <div
+                            class="bg-slate-900/50 p-6 rounded-3xl border border-slate-700/50 relative overflow-hidden group">
+                            <!-- Overlay de Candado -->
+                            <div
+                                class="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px] z-20 flex flex-col items-center justify-center transition-all group-hover:backdrop-blur-[1px]">
+                                <div
+                                    class="w-12 h-12 rounded-full bg-brand-gold/20 border border-brand-gold/50 flex items-center justify-center text-brand-gold shadow-lg mb-2">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+                                        </path>
+                                    </svg>
+                                </div>
+                                <span
+                                    class="text-[10px] font-black text-brand-gold uppercase tracking-[0.2em]">Bloqueado</span>
+                            </div>
 
-                            <div id="prediction-success"
-                                class="hidden text-center p-4 bg-green-500/20 text-green-400 rounded-xl font-bold animate-in zoom-in">
-                                ¡Pronóstico guardado correctamente!
+                            <div class="relative z-10 opacity-40">
+                                <div
+                                    class="w-12 h-12 rounded-2xl bg-brand-gold/10 flex items-center justify-center mb-4 text-brand-gold">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z">
+                                        </path>
+                                    </svg>
+                                </div>
+                                <h4 class="text-white font-bold mb-1">Fase 3: Final</h4>
+                                <p class="text-slate-500 text-[10px] mb-6">Se desbloquea para el gran cierre.</p>
+                                <div
+                                    class="w-full text-center bg-slate-800/50 text-slate-500 font-black uppercase tracking-widest py-3 rounded-xl">
+                                    Cerrado
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div class="text-center mt-10">
+                <button id="user-logout-btn"
+                    class="inline-flex items-center space-x-2 text-slate-500 hover:text-white text-[10px] font-black uppercase tracking-[0.3em] transition-all hover:tracking-[0.4em]">
+                    <span>Cerrar Sesión</span>
+                </button>
+            </div>
+
+            <!-- Sección Partido del Día (Usuario) -->
+            <div id="motd-user-section"
+                class="mt-10 pt-10 border-t border-slate-700/50 text-left hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <h3 class="text-xl font-bold text-white mb-6 flex items-center justify-center">
+                    <span class="flex h-3 w-3 rounded-full bg-purple-500 mr-3 animate-pulse"></span>
+                    Tu Pronóstico: Partido del Día
+                </h3>
+
+                <div class="bg-slate-900/80 p-6 rounded-3xl border border-purple-500/30 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-2">
+                        <span id="motd-user-datetime"
+                            class="text-[10px] font-bold text-purple-400 uppercase bg-purple-500/10 px-2 py-1 rounded-md"></span>
+                    </div>
+
+                    <div class="flex justify-between items-center mb-8 px-4">
+                        <div class="text-center w-1/3">
+                            <div id="user-motd-t1" class="text-lg font-black text-white mb-1"></div>
+                            <div class="text-[10px] text-slate-500 uppercase font-bold">Local</div>
+                        </div>
+                        <div
+                            class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-br from-brand-gold to-orange-500">
+                            VS</div>
+                        <div class="text-center w-1/3">
+                            <div id="user-motd-t2" class="text-lg font-black text-white mb-1"></div>
+                            <div class="text-[10px] text-slate-500 uppercase font-bold">Visitante</div>
+                        </div>
+                    </div>
+
+                    <form id="prediction-form" class="space-y-6">
+                        <p class="text-center text-slate-400 text-sm">¿Quién ganará este encuentro?</p>
+
+                        <div class="grid grid-cols-3 gap-3">
+                            <label class="relative group cursor-pointer">
+                                <input type="radio" name="sign" value="1" required class="peer sr-only">
+                                <div
+                                    class="bg-slate-800 border-2 border-slate-700 p-4 rounded-xl text-center transition-all peer-checked:border-purple-500 peer-checked:bg-purple-500/20">
+                                    <div class="font-black text-xl text-white">1</div>
+                                    <div class="text-[10px] text-slate-500 uppercase font-bold mt-1">Local</div>
+                                </div>
+                            </label>
+                            <label class="relative group cursor-pointer">
+                                <input type="radio" name="sign" value="X" required class="peer sr-only">
+                                <div
+                                    class="bg-slate-800 border-2 border-slate-700 p-4 rounded-xl text-center transition-all peer-checked:border-purple-500 peer-checked:bg-purple-500/20">
+                                    <div class="font-black text-xl text-white">X</div>
+                                    <div class="text-[10px] text-slate-500 uppercase font-bold mt-1">Empate
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="relative group cursor-pointer">
+                                <input type="radio" name="sign" value="2" required class="peer sr-only">
+                                <div
+                                    class="bg-slate-800 border-2 border-slate-700 p-4 rounded-xl text-center transition-all peer-checked:border-purple-500 peer-checked:bg-purple-500/20">
+                                    <div class="font-black text-xl text-white">2</div>
+                                    <div class="text-[10px] text-slate-500 uppercase font-bold mt-1">Visitante
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <button type="submit" id="submit-prediction-btn"
+                            class="w-full bg-purple-600 hover:bg-purple-500 text-white font-black uppercase tracking-widest py-4 rounded-xl shadow-lg shadow-purple-500/20 transition-all transform hover:-translate-y-1">
+                            Enviar Pronóstico
+                        </button>
+                    </form>
+
+                    <div id="prediction-success"
+                        class="hidden text-center p-4 bg-green-500/20 text-green-400 rounded-xl font-bold animate-in zoom-in">
+                        ¡Pronóstico guardado correctamente!
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
         </div>
     </section>
 
@@ -410,19 +581,56 @@
                         <div id="inscription-left" class="text-sm font-medium text-blue-400">¡Quedan 25 plazas!</div>
                     </div>
 
-                    <!-- Pago -->
+                    <!-- Canal de WhatsApp -->
                     <div
-                        class="bg-slate-900/50 p-8 rounded-2xl border border-slate-700/50 text-center hover-lift flex flex-col justify-center relative overflow-hidden group">
+                        class="bg-slate-900/50 p-8 rounded-2xl border border-brand-green/30 text-center hover-lift relative overflow-hidden group">
                         <div
-                            class="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-indigo-600/10 opacity-0 group-hover:opacity-100 transition-opacity">
+                            class="absolute inset-0 bg-brand-green/5 opacity-0 group-hover:opacity-100 transition-opacity">
                         </div>
-                        <p class="text-slate-400 text-sm uppercase tracking-widest font-semibold mb-4 relative z-10">
-                            Método de Pago</p>
-                        <div id="decorative-bizum-btn"
-                            class="relative z-10 mx-auto bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-xl font-black text-2xl tracking-wider shadow-lg shadow-blue-500/30 transform transition-transform group-hover:scale-105 cursor-pointer">
-                            BIZUM
+                        <div
+                            class="w-12 h-12 mx-auto bg-brand-green/10 rounded-full flex items-center justify-center mb-4 text-brand-green">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                            </svg>
                         </div>
+                        <p class="text-slate-400 text-sm uppercase tracking-widest font-semibold mb-2">Canal Oficial</p>
+                        <div class="text-xs text-slate-300 leading-relaxed mb-4">
+                            Únete para recibir noticias, normas e instrucciones oficiales.
+                        </div>
+                        <a href="javascript:void(0)" onclick="openWhatsAppSimulation()"
+                            class="inline-block bg-brand-green hover:bg-brand-greenHover text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all">
+                            Ver Canal Oficial
+                        </a>
                     </div>
+                </div>
+
+                <!-- Info detallada del Canal -->
+                <div class="mt-10 p-6 bg-slate-900/30 rounded-2xl border border-slate-700/50">
+                    <h4 class="text-white font-bold mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-brand-green" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22c-5.523 0-10-4.477-10-10S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm1-15h-2v6h2V7zm0 8h-2v2h2v-2z" />
+                        </svg>
+                        Funcionamiento del Canal Oficial
+                    </h4>
+                    <p class="text-sm text-slate-400 mb-4 leading-relaxed">
+                        El canal oficial de desarrollo de la competición será el grupo de WhatsApp habilitado por el
+                        administrador. A través de este canal se realizarán, según corresponda:
+                    </p>
+                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-slate-500">
+                        <li class="flex items-center"><span class="w-1.5 h-1.5 bg-brand-green rounded-full mr-2"></span>
+                            Publicación de normas e instrucciones</li>
+                        <li class="flex items-center"><span class="w-1.5 h-1.5 bg-brand-green rounded-full mr-2"></span>
+                            Envío y validación de pronósticos</li>
+                        <li class="flex items-center"><span class="w-1.5 h-1.5 bg-brand-green rounded-full mr-2"></span>
+                            Publicación de clasificaciones</li>
+                        <li class="flex items-center"><span class="w-1.5 h-1.5 bg-brand-green rounded-full mr-2"></span>
+                            Infografías y resultados oficiales</li>
+                    </ul>
+                    <p class="mt-4 text-[10px] italic text-slate-600">
+                        * Todo pronóstico publicado debe respetar el formato indicado por el administrador.
+                    </p>
                 </div>
 
                 <!-- Botón de Inscripción para Usuarios Logueados -->
@@ -617,13 +825,13 @@
                             class="bg-slate-900 border border-slate-700 text-blue-400 text-sm font-bold px-4 py-2 rounded-full">Máx.
                             98 pts</span>
                     </div>
-                    <p class="text-slate-400 mb-6 leading-relaxed">Dibuja tu camino hacia la final. Los puntos aumentan
-                        progresivamente en cada ronda.</p>
+                    <p class="text-slate-400 mb-6 leading-relaxed">Dibuja tu camino hacia la final. Los puntos premian
+                        tu capacidad de predecir los cruces iniciales y el avance final.</p>
                     <div class="grid grid-cols-2 gap-3">
                         <div
                             class="bg-slate-900/50 p-4 rounded-xl border border-slate-700/50 flex flex-col justify-center items-center text-center">
                             <span class="text-slate-400 text-xs uppercase font-semibold mb-1">Octavos</span>
-                            <strong class="text-white text-xl">+2 pts</strong>
+                            <strong class="text-white text-xl">+4 pts</strong>
                             <span class="text-slate-500 text-[10px] mt-1">por equipo</span>
                         </div>
                         <div
@@ -635,17 +843,103 @@
                         <div
                             class="bg-slate-900/50 p-4 rounded-xl border border-slate-700/50 flex flex-col justify-center items-center text-center">
                             <span class="text-slate-400 text-xs uppercase font-semibold mb-1">Semis</span>
-                            <strong class="text-white text-xl">+5 pts</strong>
+                            <strong class="text-white text-xl">+2 pts</strong>
                             <span class="text-slate-500 text-[10px] mt-1">por equipo</span>
                         </div>
                         <div
                             class="bg-slate-900/50 p-4 rounded-xl border border-blue-500/30 flex flex-col justify-center items-center text-center relative overflow-hidden">
                             <div class="absolute inset-0 bg-blue-500/5"></div>
                             <span class="text-blue-400 text-xs uppercase font-bold mb-1 relative z-10">Finalistas</span>
-                            <strong class="text-white text-xl relative z-10">+11 pts</strong>
+                            <strong class="text-white text-xl relative z-10">+1 pt</strong>
                             <span class="text-slate-500 text-[10px] mt-1 relative z-10">por equipo</span>
                         </div>
                     </div>
+                </div>
+
+                <!-- Fase 3 -->
+                <div class="bg-brand-card p-8 rounded-[2rem] border-t-4 border-brand-gold shadow-xl hover-lift">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <span class="text-brand-gold text-sm font-bold tracking-widest uppercase mb-1 block">Fase
+                                3</span>
+                            <h3 class="text-2xl font-black text-white">La Gran Final</h3>
+                        </div>
+                        <span
+                            class="bg-slate-900 border border-slate-700 text-brand-gold text-sm font-bold px-4 py-2 rounded-full">Máx.
+                            30 pts</span>
+                    </div>
+                    <p class="text-slate-400 mb-6 leading-relaxed">Pronostica el marcador exacto de la final (90 min).
+                        El turno de entrega depende de tu posición en la general.</p>
+
+                    <!-- Desglose de Puntos -->
+                    <div class="space-y-3 mb-8">
+                        <div
+                            class="flex items-center justify-between p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">
+                            <span class="text-slate-300 text-sm font-semibold">Resultado Exacto</span>
+                            <strong class="text-brand-gold text-lg">+30 pts</strong>
+                        </div>
+                        <div
+                            class="flex items-center justify-between p-3 bg-slate-900/50 rounded-xl border border-slate-700/50 opacity-80">
+                            <span class="text-slate-400 text-sm font-semibold">Diferencia de Goles</span>
+                            <strong class="text-white text-lg">+15 pts</strong>
+                        </div>
+                        <div
+                            class="flex items-center justify-between p-3 bg-slate-900/50 rounded-xl border border-slate-700/50 opacity-60">
+                            <span class="text-slate-500 text-sm font-semibold">Signo del Partido</span>
+                            <strong class="text-white text-lg">+10 pts</strong>
+                        </div>
+                    </div>
+
+                    <!-- Horas Límite Estratégicas -->
+                    <div class="bg-slate-900/80 rounded-2xl border border-brand-gold/20 overflow-hidden">
+                        <div
+                            class="bg-brand-gold/10 px-4 py-3 border-b border-brand-gold/20 flex items-center justify-between">
+                            <h4 class="text-[10px] font-black text-brand-gold uppercase tracking-widest">Horas Límite
+                                Estratégicas</h4>
+                            <span class="text-[9px] text-slate-500 font-bold uppercase italic">Peligro: 0-0 de
+                                oficio</span>
+                        </div>
+                        <div class="p-4 max-h-48 overflow-y-auto custom-scrollbar">
+                            <table class="w-full text-[10px] text-left border-collapse">
+                                <thead class="text-slate-500 border-b border-slate-800">
+                                    <tr>
+                                        <th class="py-2">Clasificación</th>
+                                        <th class="py-2">Fecha</th>
+                                        <th class="py-2 text-right">Límite</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-slate-300">
+                                    <tr class="border-b border-slate-800/50 text-brand-gold">
+                                        <td class="py-2 font-bold">1.º Clasificado</td>
+                                        <td class="py-2">Jueves 16 Jul</td>
+                                        <td class="py-2 text-right font-black">10:00</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-800/50">
+                                        <td class="py-2">2.º - 7.º Clasif.</td>
+                                        <td class="py-2">Jueves 16 Jul</td>
+                                        <td class="py-2 text-right">Escalonado</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-800/50">
+                                        <td class="py-2">8.º Clasificado</td>
+                                        <td class="py-2">Jueves 16 Jul</td>
+                                        <td class="py-2 text-right font-black">23:00</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-800/50">
+                                        <td class="py-2">9.º - 16.º Clasif.</td>
+                                        <td class="py-2">Viernes 17 Jul</td>
+                                        <td class="py-2 text-right">Escalonado</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-800/50">
+                                        <td class="py-2 text-slate-500 italic">... hasta el 25.º</td>
+                                        <td class="py-2">Sábado 18 Jul</td>
+                                        <td class="py-2 text-right font-bold">23:00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <p class="text-[9px] text-slate-500 mt-4 italic">* El incumplimiento del turno asigna
+                        automáticamente un 0-0.</p>
                 </div>
 
                 <!-- Fase Paralela -->
@@ -674,53 +968,53 @@
                             <div
                                 class="w-10 h-10 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold mr-4 shrink-0">
                                 +2</div>
-                            <div class="text-sm text-slate-300">Acierto del <strong>signo</strong> (victoria local,
-                                empate, victoria visitante - 1X2).</div>
-                        </div>
-                    </div>
-                </div>
+                            <div
+                                class="bg-brand-card p-8 rounded-[2rem] border-t-4 border-brand-gold shadow-xl hover-lift relative overflow-hidden">
+                                <div
+                                    class="absolute -right-10 -bottom-10 w-40 h-40 bg-brand-gold/10 rounded-full blur-3xl">
+                                </div>
+                                <div class="relative z-10">
+                                    <div class="flex justify-between items-start mb-6">
+                                        <div>
+                                            <span
+                                                class="text-brand-gold text-sm font-bold tracking-widest uppercase mb-1 block">Fase
+                                                3</span>
+                                            <h3 class="text-2xl font-black text-white">Gran Final</h3>
+                                        </div>
+                                        <span
+                                            class="bg-slate-900 border border-slate-700 text-brand-gold text-sm font-bold px-4 py-2 rounded-full shadow-[0_0_15px_rgba(251,191,36,0.2)]">+30
+                                            pts</span>
+                                    </div>
+                                    <p class="text-slate-400 mb-6 leading-relaxed">El último baile. Pronostica el
+                                        resultado exacto
+                                        del partido que decidirá al Campeón del Mundo.</p>
 
-                <!-- Fase 3 -->
-                <div
-                    class="bg-brand-card p-8 rounded-[2rem] border-t-4 border-brand-gold shadow-xl hover-lift relative overflow-hidden">
-                    <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-brand-gold/10 rounded-full blur-3xl"></div>
-                    <div class="relative z-10">
-                        <div class="flex justify-between items-start mb-6">
-                            <div>
-                                <span
-                                    class="text-brand-gold text-sm font-bold tracking-widest uppercase mb-1 block">Fase
-                                    3</span>
-                                <h3 class="text-2xl font-black text-white">Gran Final</h3>
+                                    <div
+                                        class="bg-gradient-to-r from-brand-gold/20 to-yellow-600/10 p-5 rounded-xl border border-brand-gold/30 mb-4">
+                                        <p class="text-white text-center font-bold text-lg mb-1">Acierto de Resultado
+                                            Exacto</p>
+                                        <p class="text-center text-brand-gold font-black text-3xl">+30 Puntos</p>
+                                    </div>
+
+                                    <div
+                                        class="flex items-start p-4 bg-slate-900/80 rounded-xl border border-slate-700">
+                                        <svg class="w-6 h-6 mr-3 text-slate-400 flex-shrink-0 mt-0.5" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <p class="text-xs text-slate-400 leading-relaxed">
+                                            <strong>Sistema de entrega por turnos:</strong> Las horas límite para enviar
+                                            el
+                                            pronóstico estarán dictadas por la Clasificación General del momento. Los
+                                            líderes
+                                            deberán enviar su resultado antes que sus perseguidores.
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
-                            <span
-                                class="bg-slate-900 border border-slate-700 text-brand-gold text-sm font-bold px-4 py-2 rounded-full shadow-[0_0_15px_rgba(251,191,36,0.2)]">+30
-                                pts</span>
-                        </div>
-                        <p class="text-slate-400 mb-6 leading-relaxed">El último baile. Pronostica el resultado exacto
-                            del partido que decidirá al Campeón del Mundo.</p>
-
-                        <div
-                            class="bg-gradient-to-r from-brand-gold/20 to-yellow-600/10 p-5 rounded-xl border border-brand-gold/30 mb-4">
-                            <p class="text-white text-center font-bold text-lg mb-1">Acierto de Resultado Exacto</p>
-                            <p class="text-center text-brand-gold font-black text-3xl">+30 Puntos</p>
-                        </div>
-
-                        <div class="flex items-start p-4 bg-slate-900/80 rounded-xl border border-slate-700">
-                            <svg class="w-6 h-6 mr-3 text-slate-400 flex-shrink-0 mt-0.5" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            <p class="text-xs text-slate-400 leading-relaxed">
-                                <strong>Sistema de entrega por turnos:</strong> Las horas límite para enviar el
-                                pronóstico estarán dictadas por la Clasificación General del momento. Los líderes
-                                deberán enviar su resultado antes que sus perseguidores.
-                            </p>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
     </section>
 
     <!-- Reglas y Calendario -->
@@ -1713,259 +2007,85 @@
                     </div>
                 </div>
 
-                <div class="bracket-container">
-                    <!-- OCTAVOS -->
-                    <div class="bracket-col space-y-4">
-                        <div class="text-center text-slate-500 text-sm font-bold uppercase tracking-widest mb-2">Octavos
+                <!-- BRACKET VISUAL (Migrado de eliminatorias.html) -->
+                <div class="bracket-scroll no-scrollbar mb-12">
+                    <div class="bracket-container">
+                        <!-- LADO IZQUIERDO -->
+                        <div class="column side-left" id="col-L-1">
+                            <div class="phase-title text-blue-500">Dieciseisavos</div>
                         </div>
-                        <!-- Match 1 -->
-                        <div
-                            class="bracket-match has-connector hover-lift border-dashed border-slate-600 bg-transparent">
-                            <div
-                                class="text-[10px] text-center text-slate-500 py-1 border-b border-slate-700/50 bg-slate-800/30">
-                                Por definir</div>
-                            <div class="bracket-team text-slate-500">
-                                <span class="flex items-center"><span
-                                        class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                <span class="bracket-score bg-slate-800/50">-</span>
-                            </div>
-                            <div class="bracket-team border-t border-slate-700/50 text-slate-500">
-                                <span class="flex items-center"><span
-                                        class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                <span class="bracket-score bg-slate-800/50">-</span>
-                            </div>
+                        <div class="column side-left" id="col-L-2">
+                            <div class="phase-title text-purple-500">Octavos</div>
                         </div>
-                        <!-- Match 2 -->
-                        <div
-                            class="bracket-match has-connector hover-lift border-dashed border-slate-600 bg-transparent">
-                            <div
-                                class="text-[10px] text-center text-slate-500 py-1 border-b border-slate-700/50 bg-slate-800/30">
-                                Por definir</div>
-                            <div class="bracket-team text-slate-500">
-                                <span class="flex items-center"><span
-                                        class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                <span class="bracket-score bg-slate-800/50">-</span>
-                            </div>
-                            <div class="bracket-team border-t border-slate-700/50 text-slate-500">
-                                <span class="flex items-center"><span
-                                        class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                <span class="bracket-score bg-slate-800/50">-</span>
-                            </div>
+                        <div class="column side-left" id="col-L-3">
+                            <div class="phase-title text-brand-gold">Cuartos</div>
                         </div>
-                        <!-- Match 3 -->
-                        <div
-                            class="bracket-match has-connector hover-lift border-dashed border-slate-600 bg-transparent">
-                            <div
-                                class="text-[10px] text-center text-slate-500 py-1 border-b border-slate-700/50 bg-slate-800/30">
-                                Por definir</div>
-                            <div class="bracket-team text-slate-500">
-                                <span class="flex items-center"><span
-                                        class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                <span class="bracket-score bg-slate-800/50">-</span>
-                            </div>
-                            <div class="bracket-team border-t border-slate-700/50 text-slate-500">
-                                <span class="flex items-center"><span
-                                        class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                <span class="bracket-score bg-slate-800/50">-</span>
-                            </div>
+                        <div class="column side-left" id="col-L-4">
+                            <div class="phase-title text-brand-green">Semifinal</div>
                         </div>
-                        <!-- Match 4 -->
-                        <div
-                            class="bracket-match has-connector hover-lift border-dashed border-slate-600 bg-transparent">
-                            <div
-                                class="text-[10px] text-center text-slate-500 py-1 border-b border-slate-700/50 bg-slate-800/30">
-                                Por definir</div>
-                            <div class="bracket-team text-slate-500">
-                                <span class="flex items-center"><span
-                                        class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                <span class="bracket-score bg-slate-800/50">-</span>
-                            </div>
-                            <div class="bracket-team border-t border-slate-700/50 text-slate-500">
-                                <span class="flex items-center"><span
-                                        class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                <span class="bracket-score bg-slate-800/50">-</span>
-                            </div>
-                        </div>
-                        <!-- Match 5 -->
-                        <div
-                            class="bracket-match has-connector hover-lift border-dashed border-slate-600 bg-transparent">
-                            <div
-                                class="text-[10px] text-center text-slate-500 py-1 border-b border-slate-700/50 bg-slate-800/30">
-                                Por definir</div>
-                            <div class="bracket-team text-slate-500">
-                                <span class="flex items-center"><span
-                                        class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                <span class="bracket-score bg-slate-800/50">-</span>
-                            </div>
-                            <div class="bracket-team border-t border-slate-700/50 text-slate-500">
-                                <span class="flex items-center"><span
-                                        class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                <span class="bracket-score bg-slate-800/50">-</span>
-                            </div>
-                        </div>
-                        <!-- Match 6 -->
-                        <div
-                            class="bracket-match has-connector hover-lift border-dashed border-slate-600 bg-transparent">
-                            <div
-                                class="text-[10px] text-center text-slate-500 py-1 border-b border-slate-700/50 bg-slate-800/30">
-                                Por definir</div>
-                            <div class="bracket-team text-slate-500">
-                                <span class="flex items-center"><span
-                                        class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                <span class="bracket-score bg-slate-800/50">-</span>
-                            </div>
-                            <div class="bracket-team border-t border-slate-700/50 text-slate-500">
-                                <span class="flex items-center"><span
-                                        class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                <span class="bracket-score bg-slate-800/50">-</span>
-                            </div>
-                        </div>
-                        <!-- Match 7 -->
-                        <div
-                            class="bracket-match has-connector hover-lift border-dashed border-slate-600 bg-transparent">
-                            <div
-                                class="text-[10px] text-center text-slate-500 py-1 border-b border-slate-700/50 bg-slate-800/30">
-                                Por definir</div>
-                            <div class="bracket-team text-slate-500">
-                                <span class="flex items-center"><span
-                                        class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                <span class="bracket-score bg-slate-800/50">-</span>
-                            </div>
-                            <div class="bracket-team border-t border-slate-700/50 text-slate-500">
-                                <span class="flex items-center"><span
-                                        class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                <span class="bracket-score bg-slate-800/50">-</span>
-                            </div>
-                        </div>
-                        <!-- Match 8 -->
-                        <div
-                            class="bracket-match has-connector hover-lift border-dashed border-slate-600 bg-transparent">
-                            <div
-                                class="text-[10px] text-center text-slate-500 py-1 border-b border-slate-700/50 bg-slate-800/30">
-                                Por definir</div>
-                            <div class="bracket-team text-slate-500">
-                                <span class="flex items-center"><span
-                                        class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                <span class="bracket-score bg-slate-800/50">-</span>
-                            </div>
-                            <div class="bracket-team border-t border-slate-700/50 text-slate-500">
-                                <span class="flex items-center"><span
-                                        class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                <span class="bracket-score bg-slate-800/50">-</span>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- CUARTOS -->
-                    <div class="bracket-col">
-                        <div class="text-center text-slate-500 text-sm font-bold uppercase tracking-widest mb-2">Cuartos
+                        <!-- CENTRO -->
+                        <div class="column center-column" id="col-center">
+                            <div class="flex flex-col items-center">
+                                <div class="center-match-label">Final</div>
+                                <div class="match-box" id="match-final">
+                                    <div class="match-header">19/07, 21:00</div>
+                                    <div class="team-row" onclick="pick('final', 1, 'home')" id="final-1-home">
+                                        <svg class="team-shield" fill="currentColor" viewBox="0 0 20 20">
+                                            <path
+                                                d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z">
+                                            </path>
+                                        </svg>
+                                        <span class="team-name">Por definir</span>
+                                    </div>
+                                    <div class="team-row" onclick="pick('final', 1, 'away')" id="final-1-away">
+                                        <svg class="team-shield" fill="currentColor" viewBox="0 0 20 20">
+                                            <path
+                                                d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z">
+                                            </path>
+                                        </svg>
+                                        <span class="team-name">Por definir</span>
+                                    </div>
+                                    <input type="hidden" name="winner-final-1" id="input-final-1">
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <div class="center-match-label text-amber-600">3er Puesto</div>
+                                <div class="match-box" id="match-third">
+                                    <div class="match-header">18/07, 23:00</div>
+                                    <div class="team-row" onclick="pick('third', 1, 'home')" id="third-1-home">
+                                        <svg class="team-shield" fill="currentColor" viewBox="0 0 20 20">
+                                            <path
+                                                d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z">
+                                            </path>
+                                        </svg>
+                                        <span class="team-name">Por definir</span>
+                                    </div>
+                                    <div class="team-row" onclick="pick('third', 1, 'away')" id="third-1-away">
+                                        <svg class="team-shield" fill="currentColor" viewBox="0 0 20 20">
+                                            <path
+                                                d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z">
+                                            </path>
+                                        </svg>
+                                        <span class="team-name">Por definir</span>
+                                    </div>
+                                    <input type="hidden" name="winner-third-1" id="input-third-1">
+                                </div>
+                            </div>
                         </div>
-                        <div class="flex-1 flex flex-col justify-around py-12 space-y-12">
-                            <div
-                                class="bracket-match has-connector hover-lift border-dashed border-slate-600 bg-transparent">
-                                <div class="bracket-team text-slate-500">
-                                    <span class="flex items-center"><span
-                                            class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                </div>
-                                <div class="bracket-team border-t border-slate-700/50 text-slate-500">
-                                    <span class="flex items-center"><span
-                                            class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                </div>
-                            </div>
-                            <div
-                                class="bracket-match has-connector hover-lift border-dashed border-slate-600 bg-transparent">
-                                <div class="bracket-team text-slate-500">
-                                    <span class="flex items-center"><span
-                                            class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                </div>
-                                <div class="bracket-team border-t border-slate-700/50 text-slate-500">
-                                    <span class="flex items-center"><span
-                                            class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                </div>
-                            </div>
-                            <div class="h-10"></div> <!-- Alineación con bloque inferior de octavos -->
 
-                            <div
-                                class="bracket-match has-connector hover-lift border-dashed border-slate-600 bg-transparent">
-                                <div class="bracket-team text-slate-500">
-                                    <span class="flex items-center"><span
-                                            class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                </div>
-                                <div class="bracket-team border-t border-slate-700/50 text-slate-500">
-                                    <span class="flex items-center"><span
-                                            class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                </div>
-                            </div>
-                            <div
-                                class="bracket-match has-connector hover-lift border-dashed border-slate-600 bg-transparent">
-                                <div class="bracket-team text-slate-500">
-                                    <span class="flex items-center"><span
-                                            class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                </div>
-                                <div class="bracket-team border-t border-slate-700/50 text-slate-500">
-                                    <span class="flex items-center"><span
-                                            class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                </div>
-                            </div>
+                        <!-- LADO DERECHO -->
+                        <div class="column side-right" id="col-R-4">
+                            <div class="phase-title text-brand-green">Semifinal</div>
                         </div>
-                    </div>
-
-                    <!-- SEMIFINALES -->
-                    <div class="bracket-col">
-                        <div class="text-center text-slate-500 text-sm font-bold uppercase tracking-widest mb-2">
-                            Semifinales
+                        <div class="column side-right" id="col-R-3">
+                            <div class="phase-title text-brand-gold">Cuartos</div>
                         </div>
-                        <div class="flex-1 flex flex-col justify-around py-32 space-y-32">
-                            <div
-                                class="bracket-match has-connector hover-lift border-dashed border-slate-600 bg-transparent">
-                                <div class="bracket-team text-slate-500">
-                                    <span class="flex items-center"><span
-                                            class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                </div>
-                                <div class="bracket-team border-t border-slate-700/50 text-slate-500">
-                                    <span class="flex items-center"><span
-                                            class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                </div>
-                            </div>
-                            <div class="h-10"></div>
-
-                            <div
-                                class="bracket-match has-connector hover-lift border-dashed border-slate-600 bg-transparent">
-                                <div class="bracket-team text-slate-500">
-                                    <span class="flex items-center"><span
-                                            class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                </div>
-                                <div class="bracket-team border-t border-slate-700/50 text-slate-500">
-                                    <span class="flex items-center"><span
-                                            class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                </div>
-                            </div>
+                        <div class="column side-right" id="col-R-2">
+                            <div class="phase-title text-purple-500">Octavos</div>
                         </div>
-                    </div>
-
-                    <!-- FINAL -->
-                    <div class="bracket-col">
-                        <div class="text-center text-brand-gold text-sm font-bold uppercase tracking-widest mb-2">Gran
-                            Final
-                        </div>
-                        <div class="flex-1 flex flex-col justify-center">
-                            <div
-                                class="bracket-match hover-lift border-brand-gold/50 shadow-[0_0_30px_rgba(251,191,36,0.15)] relative transform scale-110 ml-4">
-                                <div
-                                    class="absolute -top-4 -right-4 w-10 h-10 bg-gradient-to-br from-brand-gold to-orange-500 rounded-full flex items-center justify-center shadow-lg text-white text-xl border-2 border-brand-darker z-10">
-                                    🏆</div>
-                                <div
-                                    class="text-[10px] text-center text-brand-gold py-1.5 border-b border-brand-gold/20 bg-brand-gold/10 font-bold tracking-widest">
-                                    Por definir</div>
-                                <div class="bracket-team text-slate-400 py-3">
-                                    <span class="flex items-center"><span
-                                            class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                </div>
-                                <div class="bracket-team border-t border-slate-700/50 text-slate-400 py-3">
-                                    <span class="flex items-center"><span
-                                            class="mr-2 text-xl grayscale opacity-50">🏳️</span> Por definir</span>
-                                </div>
-                            </div>
+                        <div class="column side-right" id="col-R-1">
+                            <div class="phase-title text-blue-500">Dieciseisavos</div>
                         </div>
                     </div>
                 </div>
@@ -2046,6 +2166,75 @@
                             <span class="text-2xl text-brand-green font-bold ml-2">pts</span>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Clasificación General -->
+    <section id="clasificacion" class="py-24 relative bg-[#0a0f18]">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-5xl font-black text-white mb-4 tracking-tight">Clasificación <span
+                        class="text-brand-green">En Tiempo Real</span></h2>
+                <p class="text-slate-400 text-lg max-w-2xl mx-auto">Sigue de cerca el ranking de los mejores estrategas
+                    del Mundial 2026. Los puntos se actualizan tras cada jornada.</p>
+            </div>
+
+            <div
+                class="bg-slate-900/50 backdrop-blur-xl rounded-[2.5rem] border border-slate-700/50 overflow-hidden shadow-2xl">
+                <!-- Header de la tabla -->
+                <div class="bg-slate-800/30 px-8 py-6 border-b border-slate-700/50 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-brand-gold/10 flex items-center justify-center text-brand-gold">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                            </svg>
+                        </div>
+                        <span class="text-sm font-black text-white uppercase tracking-[0.2em]">Ranking de
+                            Participantes</span>
+                    </div>
+                    <div
+                        class="hidden sm:flex items-center text-[10px] text-slate-500 font-bold uppercase tracking-widest bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800">
+                        <span class="w-2 h-2 bg-brand-green rounded-full mr-2 animate-pulse"></span> Actualizado Live
+                    </div>
+                </div>
+
+                <!-- Tabla -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr
+                                class="text-[10px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-800">
+                                <th class="py-6 px-6 text-center">Pos</th>
+                                <th class="py-6 px-6">Participante</th>
+                                <th class="py-6 px-6 text-right">Puntuación</th>
+                            </tr>
+                        </thead>
+                        <tbody id="standings-body" class="divide-y divide-slate-800/30">
+                            <!-- Las filas se generan dinámicamente con JS -->
+                            <tr>
+                                <td colspan="3" class="py-20 text-center">
+                                    <div class="flex flex-col items-center justify-center">
+                                        <div
+                                            class="w-12 h-12 border-4 border-brand-green border-t-transparent rounded-full animate-spin mb-4">
+                                        </div>
+                                        <p class="text-slate-500 font-bold uppercase tracking-widest text-xs">Cargando
+                                            clasificación...</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Footer de la tabla -->
+                <div class="bg-slate-900/80 p-6 text-center border-t border-slate-800/50">
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">
+                        Sistema de puntuación: 1 pt por equipo en Top 3 | +2 pts extra por posición exacta
+                    </p>
                 </div>
             </div>
         </div>
@@ -2248,7 +2437,70 @@
         </div>
     </div>
 
+    <!-- Floating WhatsApp Button -->
+    <div id="whatsapp-float">
+        <a href="javascript:void(0)" onclick="openWhatsAppSimulation()" class="whatsapp-btn" title="Ver canal oficial">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.937 3.659 1.432 5.631 1.433h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+            </svg>
+        </a>
+    </div>
+
+    <!-- WhatsApp Simulation Modal -->
+    <div id="whatsapp-modal" class="fixed inset-0 z-[2000] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeWhatsAppSimulation()"></div>
+        <div
+            class="relative w-full max-w-md bg-[#0b141a] rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in duration-300 border border-slate-800">
+            <!-- Header -->
+            <div class="bg-[#202c33] p-3 flex items-center space-x-3">
+                <button onclick="closeWhatsAppSimulation()" class="text-slate-400 hover:text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <div
+                    class="w-10 h-10 rounded-full bg-brand-green flex items-center justify-center text-white font-bold text-xl">
+                    P
+                </div>
+                <div class="flex-grow">
+                    <h5 class="text-white font-bold text-sm">Porra Mundial 2026 🏆</h5>
+                    <p id="whatsapp-status" class="text-[10px] text-slate-400">Administrador, Irene, Nacho...</p>
+                </div>
+                <div class="flex space-x-3 text-slate-400">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Chat Area -->
+            <div id="whatsapp-chat-area" class="h-[500px] overflow-y-auto p-4 space-y-4 bg-[#0b141a] relative"
+                style="background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-blend-mode: overlay; background-size: contain;">
+                <!-- Dynamically filled by JS -->
+            </div>
+
+            <!-- Footer -->
+            <div class="bg-[#202c33] p-3 flex items-center space-x-3">
+                <div class="flex-grow bg-[#2a3942] rounded-lg px-4 py-2 text-slate-400 text-sm">
+                    Solo los administradores pueden enviar mensajes
+                </div>
+                <div class="w-10 h-10 rounded-full bg-brand-green flex items-center justify-center text-white">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" />
+                        <path
+                            d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
+</body>
+
+</html>
 </body>
 
 </html>
