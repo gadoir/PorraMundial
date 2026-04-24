@@ -9,3 +9,7 @@
 12. Reglas de validez de los pronósticos (TODO)
 13. Máximos globales de puntuación (TODO)
 14. Cláusula final de organización (TODO)
+
+24/04/26 18:39
+3. Canal oficial del juego
+8.2. Canal de envío
