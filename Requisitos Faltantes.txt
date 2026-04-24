@@ -1,5 +1,4 @@
 3. Canal oficial del juego
-5.2. Canal de envío
 5.6. Ejemplo de puntuación
 6. Fase 2: El camino a la final (TODO)
 8. Fase 3: La Gran Final (TODO)
