@@ -13,3 +13,4 @@
 24/04/26 18:39
 3. Canal oficial del juego
 8.2. Canal de envío
+Posibilidad de que el admin pueda cambiar el horario de los partidos
