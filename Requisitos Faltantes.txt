@@ -2,6 +2,7 @@
 3. Canal oficial del juego
 5.6. Ejemplo de puntuación
 8. Fase 3: La Gran Final (TODO)
+8.2. Canal de envío
 9. Horas límite de pronóstico para la Gran Final (TODO)
 10. Calendario de entrega de pronósticos (TODO)
 11. Desempates (TODO)
