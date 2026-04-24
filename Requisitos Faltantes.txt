@@ -11,6 +11,7 @@
 14. Cláusula final de organización (TODO)
 
 24/04/26 18:39
+Falta por hacer que la web sea Responsive
 3. Canal oficial del juego
 8.2. Canal de envío
 Posibilidad de que el admin pueda cambiar el horario de los partidos
