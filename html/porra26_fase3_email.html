@@ -1,0 +1,83 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  .email-wrap { max-width: 600px; margin: 0 auto; font-family: 'Inter', system-ui, sans-serif; }
+  .header { background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 60%, #16213e 100%); border-radius: 12px 12px 0 0; overflow: hidden; }
+  .header-bg { background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpolygon points='30 0 60 30 30 60 0 30'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); padding: 32px 24px 28px; text-align: center; }
+  .logo-area { display: inline-flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); padding: 10px 20px; border-radius: 40px; margin-bottom: 24px; }
+  .logo-dot { width: 10px; height: 10px; border-radius: 50%; background: #f5c518; }
+  .logo-text { color: #fff; font-size: 14px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+  .phase-badge { display: inline-flex; align-items: center; gap: 8px; background: #f5c518; color: #0a0a0a; padding: 6px 18px; border-radius: 30px; font-weight: 700; font-size: 13px; letter-spacing: 0.5px; margin-bottom: 16px; }
+  .phase-dot { width: 8px; height: 8px; border-radius: 50%; background: #0a0a0a; }
+  .header h1 { color: #fff; font-size: 30px; font-weight: 900; line-height: 1.2; letter-spacing: -0.5px; }
+  .header h1 span { color: #f5c518; }
+  .header-sub { color: rgba(255,255,255,0.5); font-size: 13px; margin-top: 8px; }
+  .body { background: #fff; padding: 36px 32px; }
+  .greeting { font-size: 16px; color: #333; margin-bottom: 20px; }
+  .body-text { font-size: 14px; line-height: 1.7; color: #555; margin-bottom: 16px; }
+  .body-text strong { color: #333; }
+  .closing { font-size: 15px; font-weight: 700; color: #0a0a0a; margin-top: 8px; }
+  .divider { border: none; border-top: 1px solid #f0f0f0; margin: 28px 0; }
+  .cta-section { text-align: center; margin: 28px 0; }
+  .cta-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: #999; margin-bottom: 14px; }
+  .cta-btn { display: inline-block; background: #0a0a0a; color: #fff; text-decoration: none; font-size: 15px; font-weight: 700; padding: 16px 40px; border-radius: 8px; letter-spacing: 0.3px; cursor: pointer; }
+  .cta-btn span { color: #f5c518; }
+  .cta-sub { font-size: 12px; color: #bbb; margin-top: 12px; }
+  .footer { background: #f8f8f8; border-radius: 0 0 12px 12px; padding: 20px 24px; text-align: center; }
+  .footer p { font-size: 12px; color: #aaa; line-height: 1.7; }
+  .footer a { color: #888; text-decoration: underline; }
+</style>
+
+<div class="email-wrap">
+  <div class="header">
+    <div class="header-bg">
+      <div class="logo-area">
+        <div class="logo-dot"></div>
+        <span class="logo-text">Porra '26</span>
+        <div class="logo-dot"></div>
+      </div>
+      <div>
+        <div class="phase-badge">
+          <div class="phase-dot"></div>
+          Recta final
+        </div>
+      </div>
+      <h1>Comienza la<br><span>Fase 3</span></h1>
+      <p class="header-sub">Cada predicción puede marcar la diferencia</p>
+    </div>
+  </div>
+
+  <div class="body">
+    <p class="greeting">Hola,</p>
+
+    <p class="body-text">
+      Ya está en marcha la <strong>Fase 3 de PORRA'26</strong>.
+    </p>
+
+    <p class="body-text">
+      Has llegado a una de las etapas más importantes del torneo, donde cada predicción puede marcar la diferencia.
+    </p>
+
+    <p class="body-text">
+      Gracias por seguir formando parte de la experiencia hasta este punto. Ahora todo se vuelve más decisivo.
+    </p>
+
+    <p class="closing">Mantente atento a los próximos partidos y buena suerte en la recta final.</p>
+
+    <hr class="divider">
+
+    <div class="cta-section">
+      <p class="cta-label">¿Listo para la Fase 3?</p>
+      <div class="cta-btn">Ir a <span>PORRA'26</span> →</div>
+      <p class="cta-sub">No te pierdas ningún partido de esta fase decisiva</p>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>
+      Este correo fue enviado a <strong>{{email}}</strong><br>
+      Recibiste este email por estar registrado en Porra'26 ·
+      <a href="#">Cancelar suscripción</a>
+    </p>
+  </div>
+</div>
