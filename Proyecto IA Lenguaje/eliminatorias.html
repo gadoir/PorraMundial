@@ -104,42 +104,56 @@
 </head>
 <body>
 
-    <header class="bg-[#111] border-b border-white/5 py-4 px-8 flex items-center justify-between sticky top-0 z-[100] backdrop-blur-md">
+    <header class="bg-[#111] border-b border-white/5 py-3 md:py-4 px-4 md:px-8 flex items-center justify-between sticky top-0 z-[100] backdrop-blur-md">
         <a href="index.html" class="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-            <span class="font-bold text-xs uppercase tracking-widest">Volver</span>
+            <span class="font-bold text-[10px] md:text-xs uppercase tracking-widest">Volver</span>
         </a>
         
-        <div class="absolute left-1/2 -translate-x-1/2 hidden md:block">
+        <div class="absolute left-1/2 -translate-x-1/2 hidden lg:block">
             <h1 class="text-xs font-black text-brand-green uppercase tracking-[0.4em]">Cuadro Maestro - Copa Mundial 2026</h1>
         </div>
 
-        <button type="submit" form="knockout-form" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black uppercase tracking-widest px-6 py-2.5 rounded-xl shadow-lg shadow-emerald-600/20 transition-all hover:scale-105 active:scale-95 text-[10px]">
-            Guardar Pronóstico
+        <button type="submit" form="knockout-form" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black uppercase tracking-widest px-4 md:px-6 py-2 md:py-2.5 rounded-xl shadow-lg shadow-emerald-600/20 transition-all hover:scale-105 active:scale-95 text-[9px] md:text-[10px]">
+            <span class="hidden md:inline">Guardar Pronóstico</span>
+            <span class="md:hidden">Guardar</span>
         </button>
     </header>
 
     <!-- FLOATING SAVE & EXPORT BUTTONS (BOTTOM LEFT) -->
-    <div class="fixed bottom-10 left-10 z-[200] flex flex-col space-y-3">
-        <button type="button" onclick="downloadSQL()" class="flex items-center space-x-3 bg-white/5 hover:bg-white/10 backdrop-blur-xl border border-white/10 text-white p-4 rounded-2xl shadow-2xl transition-all hover:scale-105 active:scale-95 group">
-            <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>
+    <div class="fixed bottom-6 md:bottom-10 left-4 md:left-10 z-[200] flex flex-col space-y-3">
+        <button type="button" onclick="downloadSQL()" class="flex items-center space-x-2 md:space-x-3 bg-white/5 hover:bg-white/10 backdrop-blur-xl border border-white/10 text-white p-3 md:p-4 rounded-2xl shadow-2xl transition-all hover:scale-105 active:scale-95 group">
+            <div class="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400">
+                <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>
             </div>
-            <div class="text-left pr-2">
-                <div class="text-[10px] font-black uppercase tracking-widest">Exportar SQL</div>
-                <div class="text-[9px] opacity-70 font-bold uppercase">Fase 2 completa</div>
+            <div class="text-left pr-1 md:pr-2">
+                <div class="text-[8px] md:text-[10px] font-black uppercase tracking-widest">Exportar SQL</div>
+                <div class="text-[7px] md:text-[9px] opacity-70 font-bold uppercase hidden md:block">Fase 2 completa</div>
             </div>
         </button>
 
-        <button type="submit" form="knockout-form" class="flex items-center space-x-3 bg-emerald-600 hover:bg-emerald-500 text-white p-4 rounded-2xl shadow-2xl transition-all hover:scale-110 active:scale-95 group">
-            <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+        <button type="submit" form="knockout-form" class="flex items-center space-x-2 md:space-x-3 bg-emerald-600 hover:bg-emerald-500 text-white p-3 md:p-4 rounded-2xl shadow-2xl transition-all hover:scale-110 active:scale-95 group">
+            <div class="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-white/20 flex items-center justify-center">
+                <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
             </div>
-            <div class="text-left pr-2">
-                <div class="text-[10px] font-black uppercase tracking-widest">Guardar Ahora</div>
-                <div class="text-[9px] opacity-70 font-bold uppercase">Asegura tu cuadro</div>
+            <div class="text-left pr-1 md:pr-2">
+                <div class="text-[8px] md:text-[10px] font-black uppercase tracking-widest">Guardar Ahora</div>
+                <div class="text-[7px] md:text-[9px] opacity-70 font-bold uppercase hidden md:block">Asegura tu cuadro</div>
             </div>
         </button>
+    </div>
+
+    <!-- Indicador de Scroll para Móvil -->
+    <div class="px-4">
+        <div class="scroll-hint">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+            </svg>
+            <span>Desliza para ver el cuadro completo</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+            </svg>
+        </div>
     </div>
 
     <main class="bracket-scroll no-scrollbar">
@@ -214,34 +228,26 @@
             </div>
 
             <!-- AI ANALYST FLOATING PANEL -->
-            <div id="ai-analyst" class="fixed bottom-10 right-10 z-[200] w-80 group">
-                <div id="ai-panel" class="hidden glass rounded-3xl p-6 border-brand-gold/30 shadow-2xl animate-in slide-in-from-right-10 duration-500">
+            <div id="ai-analyst" class="fixed bottom-6 md:bottom-10 right-4 md:right-10 z-[200] w-64 md:w-80 group">
+                <div id="ai-panel" class="hidden glass rounded-3xl p-4 md:p-6 border-brand-gold/30 shadow-2xl animate-in slide-in-from-right-10 duration-500">
                     <div class="flex items-center space-x-3 mb-4">
-                        <div class="w-8 h-8 rounded-full bg-brand-gold/20 flex items-center justify-center">
-                            <span class="animate-pulse">🤖</span>
+                        <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-brand-gold/20 flex items-center justify-center">
+                            <span class="animate-pulse text-sm md:text-base">🤖</span>
                         </div>
-                        <h4 class="text-xs font-black text-brand-gold uppercase tracking-widest">Consultar Analista IA Maestro</h4>
+                        <h4 class="text-[9px] md:text-xs font-black text-brand-gold uppercase tracking-widest">Analista IA Maestro</h4>
                     </div>
-                    <div id="ai-content" class="text-[11px] text-slate-400 leading-relaxed italic">
+                    <div id="ai-content" class="text-[10px] md:text-[11px] text-slate-400 leading-relaxed italic">
                         Selecciona un enfrentamiento definido para recibir mi análisis estratégico...
-                    </div>
-                    <div class="mt-4 pt-4 border-t border-white/5 flex justify-between items-center">
-                        <span class="text-[9px] text-slate-600 font-bold uppercase">Estado: Procesando</span>
-                        <div class="flex space-x-1">
-                            <div class="w-1 h-1 bg-brand-gold rounded-full animate-bounce" style="animation-delay: 0s"></div>
-                            <div class="w-1 h-1 bg-brand-gold rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
-                            <div class="w-1 h-1 bg-brand-gold rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
-                        </div>
                     </div>
                 </div>
                 
-                <button type="button" onclick="toggleAI()" class="mt-4 ml-auto flex items-center space-x-3 bg-black/80 backdrop-blur-xl border border-brand-gold/30 p-4 rounded-2xl hover:scale-105 transition-all shadow-2xl group">
-                    <div class="w-10 h-10 rounded-xl bg-brand-gold flex items-center justify-center text-black shadow-lg shadow-brand-gold/20">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                <button type="button" onclick="toggleAI()" class="mt-4 ml-auto flex items-center space-x-2 md:space-x-3 bg-black/80 backdrop-blur-xl border border-brand-gold/30 p-3 md:p-4 rounded-2xl hover:scale-105 transition-all shadow-2xl group">
+                    <div class="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-brand-gold flex items-center justify-center text-black shadow-lg shadow-brand-gold/20">
+                        <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     </div>
                     <div class="text-left">
-                        <div class="text-[10px] font-black text-brand-gold uppercase tracking-widest">Consultar Analista IA Maestro</div>
-                        <div id="ai-status-text" class="text-[9px] text-slate-500 font-bold uppercase">Esperando Equipos</div>
+                        <div class="text-[8px] md:text-[10px] font-black text-brand-gold uppercase tracking-widest">Analista IA</div>
+                        <div id="ai-status-text" class="text-[7px] md:text-[9px] text-slate-500 font-bold uppercase hidden md:block">Esperando Equipos</div>
                     </div>
                 </button>
             </div>
@@ -255,7 +261,7 @@
     </main>
 
     <script>
-        const structure = {
+        const structure = JSON.parse(localStorage.getItem('custom_bracket_structure')) || {
             dieciseisavos_L: [
                 { id: 1, home: "2A", away: "2B", date: "28/06", time: "21:00" },
                 { id: 2, home: "1C", away: "2F", date: "29/06", time: "19:00" },

@@ -1,5 +1,5 @@
 // --- Constantes del Cuadro Eliminatorio ---
-const structureBracket = {
+let structureBracket = JSON.parse(localStorage.getItem('custom_bracket_structure')) || {
     dieciseisavos_L: [
         { id: 1, home: "2A", away: "2B", date: "28/06", time: "21:00" },
         { id: 2, home: "1C", away: "2F", date: "29/06", time: "19:00" },
@@ -203,6 +203,36 @@ window.addEventListener('scroll', () => {
         nav.classList.remove('shadow-xl', 'bg-slate-900/95');
         nav.classList.add('glass-nav');
     }
+});
+
+// Lógica de Menú Móvil
+const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+const mobileMenu = document.getElementById('mobile-menu');
+const menuIconOpen = document.getElementById('menu-icon-open');
+const menuIconClose = document.getElementById('menu-icon-close');
+
+if (mobileMenuBtn) {
+    mobileMenuBtn.addEventListener('click', () => {
+        const isHidden = mobileMenu.classList.contains('hidden');
+        if (isHidden) {
+            mobileMenu.classList.remove('hidden');
+            menuIconOpen.classList.add('hidden');
+            menuIconClose.classList.remove('hidden');
+        } else {
+            mobileMenu.classList.add('hidden');
+            menuIconOpen.classList.remove('hidden');
+            menuIconClose.classList.add('hidden');
+        }
+    });
+}
+
+// Cerrar menú móvil al hacer click en un enlace
+document.querySelectorAll('#mobile-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        menuIconOpen.classList.remove('hidden');
+        menuIconClose.classList.add('hidden');
+    });
 });
 
 // Smooth scroll para anclas (Safari fallback)
@@ -553,17 +583,29 @@ function updateNavbarUI(username) {
     const navUsername = document.getElementById('nav-username');
     const whatsappBtn = document.getElementById('whatsapp-float');
 
+    // Elementos Menú Móvil
+    const mobileAuthGuest = document.getElementById('mobile-auth-guest');
+    const mobileAuthUser = document.getElementById('mobile-auth-user');
+    const mobileNavUsername = document.getElementById('mobile-nav-username');
+
     if (username) {
         if (authBtn) authBtn.classList.add('hidden');
         if (registerBtn) registerBtn.classList.add('hidden');
         if (userProfile) userProfile.classList.remove('hidden');
         if (navUsername) navUsername.innerText = username;
         if (whatsappBtn) whatsappBtn.classList.add('show');
+
+        if (mobileAuthGuest) mobileAuthGuest.classList.add('hidden');
+        if (mobileAuthUser) mobileAuthUser.classList.remove('hidden');
+        if (mobileNavUsername) mobileNavUsername.innerText = username;
     } else {
         if (authBtn) authBtn.classList.remove('hidden');
         if (registerBtn) registerBtn.classList.remove('hidden');
         if (userProfile) userProfile.classList.add('hidden');
         if (whatsappBtn) whatsappBtn.classList.remove('show');
+
+        if (mobileAuthGuest) mobileAuthGuest.classList.remove('hidden');
+        if (mobileAuthUser) mobileAuthUser.classList.add('hidden');
     }
 }
 
@@ -643,6 +685,11 @@ logoutButtons.forEach(btn => {
         // Ocultar sección de partido del día
         const motdUserSection = document.getElementById('motd-user-section');
         if (motdUserSection) motdUserSection.classList.add('hidden');
+
+        // Cerrar menú móvil si está abierto
+        if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+            mobileMenuBtn.click();
+        }
     });
 });
 
@@ -777,6 +824,26 @@ if (createMotdForm) {
         }
 
         alert('¡Partido del Día publicado con éxito!');
+        
+        // --- ENVÍO AUTOMÁTICO A WHATSAPP ---
+        const now = new Date();
+        const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+        const whatsappMsg = {
+            sender: 'Administrador',
+            color: 'text-brand-green',
+            text: `📢 ¡NUEVO PARTIDO DEL DÍA PUBLICADO!\n\n⚽ ${motd.t1} vs ${motd.t2}\n📅 Fecha: ${motd.date}\n⏰ Hora: ${motd.time}\n\n¡Entra ya y deja tu pronóstico para sumar puntos extra! 🏆`,
+            time: timeStr
+        };
+
+        const messages = JSON.parse(localStorage.getItem('whatsapp_messages') || '[]');
+        messages.push(whatsappMsg);
+        localStorage.setItem('whatsapp_messages', JSON.stringify(messages));
+        
+        // Si el chat está abierto, refrescarlo
+        if (typeof renderWhatsAppMessages === 'function') {
+            renderWhatsAppMessages();
+        }
+
         createMotdForm.reset();
         motdDropdown.disabled = true;
         publishBtn.disabled = true;
@@ -1089,7 +1156,8 @@ const venues = [
     "Hard Rock Stadium, Miami"
 ];
 
-const matchSchedule = {
+// Cargar horarios personalizados de localStorage o usar los por defecto
+let matchSchedule = JSON.parse(localStorage.getItem('custom_match_schedule')) || {
     "1": [
         {
             "t1": "México",
@@ -1565,7 +1633,9 @@ function renderMatches(jornada) {
                         <span class="font-bold text-white text-lg">${team1.code}</span>
                     </div>
                     <div class="w-1/5 text-center">
-                        <span class="bg-slate-900 border border-slate-700 text-white font-black px-3 py-1 rounded-lg">- : -</span>
+                        <span class="bg-slate-900 border border-slate-700 text-white font-black px-3 py-1 rounded-lg">
+                            ${officialMatchScores[`${match.t1}_vs_${match.t2}`] || '- : -'}
+                        </span>
                     </div>
                     <div class="flex items-center justify-end space-x-3 w-2/5">
                         <span class="font-bold text-white text-lg">${team2.code}</span>
@@ -1823,23 +1893,263 @@ function seedUsers() {
     updateInscriptionCounter();
 }
 
-// --- Lógica de Clasificación en Tiempo Real ---
-
-// Resultados Oficiales Simulados (Para cálculo de puntos)
-const officialResults = {
-    'A': [],
-    'B': [],
-    'C': [],
-    'D': [],
-    'E': [],
-    'F': [],
-    'G': [],
-    'H': [],
-    'I': [],
-    'J': [],
-    'K': [],
-    'L': []
+let officialResults = {
+    'A': [], 'B': [], 'C': [], 'D': [], 'E': [], 'F': [],
+    'G': [], 'H': [], 'I': [], 'J': [], 'K': [], 'L': []
 };
+let officialMatchScores = JSON.parse(localStorage.getItem('official_match_scores')) || {};
+
+// --- Función de Simulación de Resultados Realista ---
+function simulateAllResults() {
+    const simulationDateInput = document.getElementById('simulation-date');
+    const simulationLimit = simulationDateInput ? new Date(simulationDateInput.value) : new Date('2026-07-20');
+    
+    console.log("Iniciando simulación hasta:", simulationLimit.toDateString());
+    
+    // Helper para parsear fechas de partidos (DD/MM)
+    const parseMatchDate = (dateStr) => {
+        const [day, month] = dateStr.split('/').map(Number);
+        return new Date(2026, month - 1, day);
+    };
+    
+    // 1. Limpiar resultados anteriores
+    Object.keys(officialResults).forEach(group => officialResults[group] = []);
+    officialMatchScores = {};
+    const groupStandingsGlobal = {};
+
+    // 2. Simular cada grupo
+    Object.keys(groups).forEach(groupLetter => {
+        const groupTeams = groups[groupLetter];
+        const standings = groupTeams.map(t => ({ 
+            name: t.name, 
+            pts: 0, 
+            pj: 0,
+            gf: 0, 
+            gc: 0, 
+            gd: 0,
+            rating: (teamRatings[t.name] ? teamRatings[t.name].rating : 75)
+        }));
+
+        // Buscar partidos de este grupo en matchSchedule
+        // Nota: Los grupos en matchSchedule son 1-12, los mapeamos a A-L
+        const groupIndex = groupLetter.charCodeAt(0) - 65; // A=0, B=1...
+        const jornadaKeys = ['1', '2', '3'];
+        
+        jornadaKeys.forEach(j => {
+            const matches = matchSchedule[j] || [];
+            matches.forEach(m => {
+                // Verificar si el partido ya ocurrió según el límite de simulación
+                const mDate = parseMatchDate(m.date);
+                if (mDate > simulationLimit) return; // Saltarse partidos futuros
+
+                const t1 = standings.find(s => s.name === m.t1);
+                const t2 = standings.find(s => s.name === m.t2);
+
+                if (t1 && t2) {
+                    // Simulación Realista
+                    const res = simulateMatch(t1.rating, t2.rating);
+                    
+                    // Actualizar Tabla
+                    t1.pj += 1;
+                    t2.pj += 1;
+                    t1.gf += res.g1;
+                    t1.gc += res.g2;
+                    t2.gf += res.g2;
+                    t2.gc += res.g1;
+
+                    if (res.g1 > res.g2) t1.pts += 3;
+                    else if (res.g1 < res.g2) t2.pts += 3;
+                    else { t1.pts += 1; t2.pts += 1; }
+
+                    // Guardar resultado individual
+                    officialMatchScores[`${m.t1}_vs_${m.t2}`] = `${res.g1} : ${res.g2}`;
+                }
+            });
+        });
+
+        // Calcular Diferencia de Goles
+        standings.forEach(s => s.gd = s.gf - s.gc);
+
+        // Ordenar: Puntos -> GD -> GF -> Rating (Tie-breaker)
+        standings.sort((a, b) => {
+            if (b.pts !== a.pts) return b.pts - a.pts;
+            if (b.gd !== a.gd) return b.gd - a.gd;
+            if (b.gf !== a.gf) return b.gf - a.gf;
+            return b.rating - a.rating;
+        });
+
+        // Guardar Top 3 para la Porra
+        officialResults[groupLetter] = [standings[0].name, standings[1].name, standings[2].name];
+        
+        // Guardar tabla completa del grupo
+        groupStandingsGlobal[groupLetter] = standings;
+    });
+
+    localStorage.setItem('official_results', JSON.stringify(officialResults));
+    localStorage.setItem('official_match_scores', JSON.stringify(officialMatchScores));
+    localStorage.setItem('group_standings', JSON.stringify(groupStandingsGlobal));
+    console.log("Simulación completada:", officialResults);
+    
+    // Actualizar Clasificación
+    renderStandings();
+    renderGroupStandings();
+    alert(`¡Simulación completada hasta el ${simulationLimit.toLocaleDateString()}! La clasificación general se ha actualizado con los resultados de los partidos jugados hasta esa fecha.`);
+}
+
+function resetTournament() {
+    if (confirm("¿Estás seguro de que quieres reiniciar el torneo? Se borrarán todos los resultados oficiales simulados y la clasificación volverá a cero.")) {
+        localStorage.removeItem('official_results');
+        localStorage.removeItem('official_match_scores');
+        localStorage.removeItem('group_standings');
+        Object.keys(officialResults).forEach(group => officialResults[group] = []);
+        officialMatchScores = {};
+        renderStandings();
+        renderGroupStandings();
+        
+        // Recargar jornada actual para limpiar marcadores
+        const currentJornada = document.querySelector('.jornada-btn.bg-purple-500');
+        if (currentJornada) {
+            renderMatches(currentJornada.id.replace('btn-jornada-', ''));
+        }
+        
+        alert("El torneo ha sido reiniciado.");
+    }
+}
+
+function simulateMatch(r1, r2) {
+    const diff = r1 - r2;
+    
+    // Calcular Expected Goals (lambda) de forma realista
+    // Base de 1.3 goles por equipo, ajustado por diferencia de calidad (0.05 por punto)
+    let lambda1 = 1.3 + (diff * 0.05);
+    let lambda2 = 1.3 - (diff * 0.05);
+    
+    // Asegurar límites realistas (mínimo 0.2 para que los débiles siempre tengan algo de chance, máximo 3.5)
+    lambda1 = Math.max(0.2, Math.min(3.5, lambda1));
+    lambda2 = Math.max(0.2, Math.min(3.5, lambda2));
+
+    // Función Poisson simple para generar goles
+    function poisson(lambda) {
+        let L = Math.exp(-lambda);
+        let p = 1.0;
+        let k = 0;
+        do {
+            k++;
+            p *= Math.random();
+        } while (p > L);
+        return k - 1;
+    }
+
+    let g1 = poisson(lambda1);
+    let g2 = poisson(lambda2);
+
+    // Factor locura sutil (solo +1 gol inesperado en el ~4% de los casos)
+    if (Math.random() > 0.96) g1 += 1;
+    if (Math.random() > 0.96) g2 += 1;
+    
+    // Evitar goleadas absolutamente ridículas por aleatoriedad (tope en 7)
+    g1 = Math.min(g1, 7);
+    g2 = Math.min(g2, 7);
+
+    return { g1, g2 };
+}
+
+function renderGroupStandings() {
+    const container = document.getElementById('group-standings-container');
+    if (!container) return;
+    
+    let standingsData = JSON.parse(localStorage.getItem('group_standings'));
+    
+    // Si no hay datos guardados, generar estado inicial con 0 puntos
+    if (!standingsData || Object.keys(standingsData).length === 0) {
+        standingsData = {};
+        Object.keys(groups).forEach(groupLetter => {
+            standingsData[groupLetter] = groups[groupLetter].map(t => ({ 
+                name: t.name, 
+                pts: 0, 
+                pj: 0, 
+                gf: 0, 
+                gc: 0, 
+                gd: 0 
+            }));
+        });
+    }
+
+    container.innerHTML = '';
+    
+    Object.keys(standingsData).sort().forEach(groupLetter => {
+        const teams = standingsData[groupLetter];
+        const card = document.createElement('div');
+        card.className = 'bg-slate-900 border border-slate-700 rounded-xl overflow-hidden hover-lift';
+        
+        let tableHTML = `
+            <div class="bg-brand-green/20 border-b border-brand-green/30 py-2 px-4 text-center">
+                <h4 class="text-brand-green font-black uppercase tracking-widest text-sm">Grupo ${groupLetter}</h4>
+            </div>
+            <table class="w-full text-xs text-left">
+                <thead class="bg-slate-800 text-slate-400 border-b border-slate-700">
+                    <tr>
+                        <th class="py-2 px-3 font-semibold">Equipo</th>
+                        <th class="py-2 px-2 text-center font-semibold" title="Puntos">Pts</th>
+                        <th class="py-2 px-2 text-center font-semibold" title="Partidos Jugados">PJ</th>
+                        <th class="py-2 px-2 text-center font-semibold" title="Diferencia de Goles">Dif</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800/50">
+        `;
+
+        teams.forEach((team, index) => {
+            const teamInfo = teamLookup[team.name] || { flag: 'un', code: team.name.substring(0,3).toUpperCase() };
+            const isQualified = index < 3; // Top 3 pasa
+            
+            tableHTML += `
+                <tr class="hover:bg-slate-800/30 transition-colors ${isQualified ? 'bg-brand-green/5' : ''}">
+                    <td class="py-2 px-3 flex items-center">
+                        <span class="w-4 inline-block text-center text-slate-500 font-bold mr-2 text-[10px]">${index + 1}</span>
+                        <img src="https://flagcdn.com/w20/${teamInfo.flag}.png" class="w-4 h-3 rounded-[2px] shadow-sm mr-2 opacity-90" alt="${team.name}">
+                        <span class="text-white font-bold truncate max-w-[80px] sm:max-w-full" title="${team.name}">${teamInfo.code}</span>
+                    </td>
+                    <td class="py-2 px-2 text-center font-black ${isQualified ? 'text-brand-green' : 'text-slate-400'}">${team.pts}</td>
+                    <td class="py-2 px-2 text-center text-slate-400">${team.pj}</td>
+                    <td class="py-2 px-2 text-center font-bold ${team.gd > 0 ? 'text-blue-400' : (team.gd < 0 ? 'text-red-400' : 'text-slate-500')}">${team.gd > 0 ? '+'+team.gd : team.gd}</td>
+                </tr>
+            `;
+        });
+
+        tableHTML += `
+                </tbody>
+            </table>
+        `;
+        card.innerHTML = tableHTML;
+        container.appendChild(card);
+    });
+}
+
+// Vincular botón al cargar el DOM
+document.addEventListener('DOMContentLoaded', () => {
+    const simBtn = document.getElementById('simulate-results-btn');
+    const resetBtn = document.getElementById('reset-tournament-btn');
+    
+    if (simBtn) {
+        simBtn.addEventListener('click', simulateAllResults);
+    }
+    if (resetBtn) {
+        resetBtn.addEventListener('click', resetTournament);
+    }
+    
+    // Cargar resultados guardados si existen
+    const savedResults = localStorage.getItem('official_results');
+    const savedScores = localStorage.getItem('official_match_scores');
+    if (savedResults) {
+        const parsed = JSON.parse(savedResults);
+        Object.keys(parsed).forEach(k => officialResults[k] = parsed[k]);
+        if (savedScores) officialMatchScores = JSON.parse(savedScores);
+        renderStandings();
+        renderGroupStandings();
+    } else {
+        renderGroupStandings(); // Para mostrar el mensaje de "No hay datos"
+    }
+});
 
 function calculateUserPoints(username) {
     const allPredictions = JSON.parse(localStorage.getItem('porra_predictions') || '{}');
@@ -1965,18 +2275,46 @@ function closeWhatsAppSimulation() {
 async function startWhatsAppSimulation() {
     const chatArea = document.getElementById('whatsapp-chat-area');
     const status = document.getElementById('whatsapp-status');
+    const footerGuest = document.getElementById('whatsapp-footer-guest');
+    const footerAdmin = document.getElementById('whatsapp-footer-admin');
+    const sendBtn = document.getElementById('whatsapp-send-btn');
+    const input = document.getElementById('whatsapp-input');
+    
     if (!chatArea || !status) return;
 
-    // Obtener número real de usuarios pagados
-    const users = JSON.parse(localStorage.getItem('porra_users') || '[]');
-    const paidCount = users.filter(u => u.paid).length;
+    // Verificar si el usuario es administrador
+    const isAdmin = localStorage.getItem('is_admin') === 'true';
+    const loggedUser = localStorage.getItem('logged_user');
 
-    const messages = [
-        { sender: 'Administrador', color: 'text-brand-green', text: '¡Bienvenidos a todos! ⚽ Este es el canal oficial de la Porra Mundial 2026.', time: '14:20' },
-        { sender: 'Administrador', color: 'text-brand-green', text: 'Recuerden que para validar su inscripción deben realizar el pago por Bizum y enviar el comprobante.', time: '14:22' },
-        { sender: 'Administrador', color: 'text-brand-green', text: 'Normas del Grupo:\n• Solo se permiten pronósticos en el formato oficial.\n• Respeto absoluto entre competidores.\n• Las decisiones del admin son inapelables.', time: '14:25', isRules: true },
-        { sender: 'Administrador', color: 'text-brand-green', text: `¡Ya somos ${paidCount} participantes oficiales! 🏃‍♂️💨 Las plazas vuelan. ¡No te quedes fuera!`, time: '14:30' }
-    ];
+    if (isAdmin) {
+        if (footerGuest) footerGuest.classList.add('hidden');
+        if (footerAdmin) footerAdmin.classList.remove('hidden');
+        
+        // Vincular eventos solo una vez
+        if (sendBtn && !sendBtn.dataset.bound) {
+            sendBtn.addEventListener('click', handleWhatsAppSend);
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') handleWhatsAppSend();
+            });
+            sendBtn.dataset.bound = 'true';
+        }
+    } else {
+        if (footerGuest) footerGuest.classList.remove('hidden');
+        if (footerAdmin) footerAdmin.classList.add('hidden');
+    }
+
+    // Cargar mensajes de localStorage o usar iniciales
+    let messages = JSON.parse(localStorage.getItem('whatsapp_messages'));
+    if (!messages) {
+        const paidCount = JSON.parse(localStorage.getItem('porra_users') || '[]').filter(u => u.paid).length;
+        messages = [
+            { sender: 'Administrador', color: 'text-brand-green', text: '¡Bienvenidos a todos! ⚽ Este es el canal oficial de la Porra Mundial 2026.', time: '14:20' },
+            { sender: 'Administrador', color: 'text-brand-green', text: 'Recuerden que para validar su inscripción deben realizar el pago por Bizum y enviar el comprobante.', time: '14:22' },
+            { sender: 'Administrador', color: 'text-brand-green', text: 'Normas del Grupo:\n• Solo se permiten pronósticos en el formato oficial.\n• Respeto absoluto entre competidores.\n• Las decisiones del admin son inapelables.', time: '14:25', isRules: true },
+            { sender: 'Administrador', color: 'text-brand-green', text: `¡Ya somos ${paidCount} participantes oficiales! 🏃‍♂️💨 Las plazas vuelan. ¡No te quedes fuera!`, time: '14:30' }
+        ];
+        localStorage.setItem('whatsapp_messages', JSON.stringify(messages));
+    }
 
     chatArea.innerHTML = `
         <div class="flex justify-center mb-4">
@@ -1986,18 +2324,30 @@ async function startWhatsAppSimulation() {
         </div>
     `;
 
-    for (const msg of messages) {
-        status.innerText = 'Escribiendo...';
-        await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 500));
-        
-        status.innerText = 'Administrador';
-        
+    renderWhatsAppMessages();
+}
+
+function renderWhatsAppMessages() {
+    const chatArea = document.getElementById('whatsapp-chat-area');
+    const isAdmin = localStorage.getItem('is_admin') === 'true';
+    if (!chatArea) return;
+
+    const messages = JSON.parse(localStorage.getItem('whatsapp_messages') || '[]');
+    chatArea.innerHTML = `
+        <div class="flex justify-center mb-4">
+            <span class="bg-[#182229] text-[10px] text-[#8696a0] px-3 py-1 rounded-lg shadow-sm">
+                LOS MENSAJES ESTÁN CIFRADOS DE EXTREMO A EXTREMO
+            </span>
+        </div>
+    `;
+
+    messages.forEach((msg, index) => {
         const msgDiv = document.createElement('div');
-        msgDiv.className = 'flex flex-col items-start max-w-[85%] animate-in slide-in-from-bottom-2 duration-300';
+        msgDiv.className = 'flex flex-col items-start max-w-[85%] group relative mb-4';
         
-        const innerHTML = `
+        msgDiv.innerHTML = `
             <div class="bg-[#202c33] p-2 rounded-lg rounded-tl-none shadow-sm relative ${msg.isRules ? 'border-l-4 border-brand-gold' : ''}">
-                <span class="${msg.color} text-[10px] font-bold block mb-1">${msg.sender}</span>
+                <span class="${msg.color || 'text-brand-green'} text-[10px] font-bold block mb-1">${msg.sender}</span>
                 <p class="text-white text-xs leading-relaxed ${msg.isRules ? 'italic' : ''}">
                     ${msg.text.replace(/\n/g, '<br>')}
                 </p>
@@ -2005,14 +2355,277 @@ async function startWhatsAppSimulation() {
                     <span class="text-[9px] text-slate-400">${msg.time}</span>
                     <svg class="w-3 h-3 text-blue-400" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
                 </div>
+                
+                ${isAdmin ? `
+                    <div class="absolute -right-10 top-0 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col space-y-1">
+                        <button onclick="editWhatsAppMessage(${index})" class="p-1.5 bg-slate-800 rounded-full text-slate-400 hover:text-brand-gold">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                        </button>
+                        <button onclick="deleteWhatsAppMessage(${index})" class="p-1.5 bg-slate-800 rounded-full text-slate-400 hover:text-red-500">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        </button>
+                    </div>
+                ` : ''}
             </div>
         `;
         
-        msgDiv.innerHTML = innerHTML;
         chatArea.appendChild(msgDiv);
-        chatArea.scrollTop = chatArea.scrollHeight;
-        
-        await new Promise(resolve => setTimeout(resolve, 400));
+    });
+    chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+function handleWhatsAppSend() {
+    const input = document.getElementById('whatsapp-input');
+    if (!input || !input.value.trim()) return;
+
+    const now = new Date();
+    const time = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+
+    const messages = JSON.parse(localStorage.getItem('whatsapp_messages') || '[]');
+    messages.push({
+        sender: 'Administrador',
+        color: 'text-brand-green',
+        text: input.value.trim(),
+        time: time
+    });
+
+    localStorage.setItem('whatsapp_messages', JSON.stringify(messages));
+    input.value = '';
+    renderWhatsAppMessages();
+}
+
+window.editWhatsAppMessage = function(index) {
+    const messages = JSON.parse(localStorage.getItem('whatsapp_messages') || '[]');
+    const msg = messages[index];
+    const newText = prompt('Editar mensaje:', msg.text);
+    
+    if (newText !== null) {
+        messages[index].text = newText;
+        localStorage.setItem('whatsapp_messages', JSON.stringify(messages));
+        renderWhatsAppMessages();
     }
 }
 
+window.deleteWhatsAppMessage = function(index) {
+    if (confirm('¿Seguro que quieres borrar este mensaje?')) {
+        const messages = JSON.parse(localStorage.getItem('whatsapp_messages') || '[]');
+        messages.splice(index, 1);
+        localStorage.setItem('whatsapp_messages', JSON.stringify(messages));
+        renderWhatsAppMessages();
+    }
+}
+
+
+// --- Lógica de Edición de Horarios para Admin ---
+document.addEventListener('DOMContentLoaded', () => {
+    const loadMatchesBtn = document.getElementById('admin-load-matches-btn');
+    const saveScheduleBtn = document.getElementById('admin-save-schedule-btn');
+    const matchesList = document.getElementById('admin-matches-list');
+    const jornadaSelect = document.getElementById('admin-schedule-jornada');
+    const saveContainer = document.getElementById('admin-save-schedule-container');
+
+    if (loadMatchesBtn) {
+        loadMatchesBtn.addEventListener('click', () => {
+            const jornada = jornadaSelect.value;
+            renderAdminMatches(jornada);
+        });
+    }
+
+    function renderAdminMatches(jornada) {
+        if (!matchesList) return;
+        matchesList.innerHTML = '';
+        saveContainer.classList.remove('hidden');
+
+        if (jornada === 'bracket') {
+            // Renderizar eliminatorias (Dieciseisavos)
+            ['L', 'R'].forEach(side => {
+                const matches = structureBracket[`dieciseisavos_${side}`];
+                const header = document.createElement('h4');
+                header.className = 'text-brand-green font-bold text-sm mt-4 mb-2 uppercase tracking-widest';
+                header.innerText = `Bloque ${side}`;
+                matchesList.appendChild(header);
+
+                matches.forEach((match, index) => {
+                    const matchDiv = document.createElement('div');
+                    matchDiv.className = 'bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col space-y-3';
+                    matchDiv.innerHTML = `
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-bold text-white">${match.home} vs ${match.away}</span>
+                            <span class="text-[10px] text-slate-500 uppercase font-bold">Ref: Bracket-${side}-${index}</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Fecha (DD/MM)</label>
+                                <input type="text" value="${match.date}" data-type="bracket" data-side="${side}" data-index="${index}" data-field="date"
+                                    class="admin-match-input w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-white focus:border-brand-gold outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Hora (HH:MM)</label>
+                                <input type="text" value="${match.time}" data-type="bracket" data-side="${side}" data-index="${index}" data-field="time"
+                                    class="admin-match-input w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-white focus:border-brand-gold outline-none">
+                            </div>
+                        </div>
+                    `;
+                    matchesList.appendChild(matchDiv);
+                });
+            });
+            
+            // También permitir editar roundSchedule (Octavos en adelante)
+            const scheduleHeader = document.createElement('h4');
+            scheduleHeader.className = 'text-brand-gold font-bold text-sm mt-6 mb-2 uppercase tracking-widest';
+            scheduleHeader.innerText = `Siguientes Rondas (Octavos a Final)`;
+            matchesList.appendChild(scheduleHeader);
+
+            Object.keys(structureBracket.roundSchedule).forEach(key => {
+                const times = structureBracket.roundSchedule[key];
+                const roundDiv = document.createElement('div');
+                roundDiv.className = 'bg-slate-900/50 p-4 rounded-xl border border-slate-800 space-y-3 mb-4';
+                roundDiv.innerHTML = `<div class="text-[10px] font-bold text-slate-400 uppercase mb-2">Ronda: ${key}</div>`;
+                
+                times.forEach((timeStr, idx) => {
+                    roundDiv.innerHTML += `
+                        <div class="flex items-center space-x-2">
+                            <span class="text-[10px] text-slate-500 w-8">M${idx+1}:</span>
+                            <input type="text" value="${timeStr}" data-type="roundSchedule" data-key="${key}" data-index="${idx}"
+                                class="admin-match-input w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1 text-xs text-white focus:border-brand-gold outline-none">
+                        </div>
+                    `;
+                });
+                matchesList.appendChild(roundDiv);
+            });
+
+        } else {
+            // Renderizar jornada normal
+            const matches = matchSchedule[jornada] || [];
+            matches.forEach((match, index) => {
+                const matchDiv = document.createElement('div');
+                matchDiv.className = 'bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col space-y-3';
+                matchDiv.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-bold text-white">${match.t1} vs ${match.t2}</span>
+                        <span class="text-[10px] text-slate-500 uppercase font-bold">Ref: ${jornada}-${index}</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Fecha (DD/MM)</label>
+                            <input type="text" value="${match.date}" data-type="group" data-jornada="${jornada}" data-index="${index}" data-field="date"
+                                class="admin-match-input w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-white focus:border-brand-gold outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Hora (HH:MM)</label>
+                            <input type="text" value="${match.time}" data-type="group" data-jornada="${jornada}" data-index="${index}" data-field="time"
+                                class="admin-match-input w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-white focus:border-brand-gold outline-none">
+                        </div>
+                    </div>
+                `;
+                matchesList.appendChild(matchDiv);
+            });
+        }
+    }
+
+    if (saveScheduleBtn) {
+        saveScheduleBtn.addEventListener('click', () => {
+            const inputs = document.querySelectorAll('.admin-match-input');
+            let groupsChanged = false;
+            let bracketChanged = false;
+
+            inputs.forEach(input => {
+                const type = input.dataset.type;
+                
+                if (type === 'group') {
+                    const jornada = input.dataset.jornada;
+                    const index = parseInt(input.dataset.index);
+                    const field = input.dataset.field;
+                    matchSchedule[jornada][index][field] = input.value;
+                    groupsChanged = true;
+                } else if (type === 'bracket') {
+                    const side = input.dataset.side;
+                    const index = parseInt(input.dataset.index);
+                    const field = input.dataset.field;
+                    structureBracket[`dieciseisavos_${side}`][index][field] = input.value;
+                    bracketChanged = true;
+                } else if (type === 'roundSchedule') {
+                    const key = input.dataset.key;
+                    const index = parseInt(input.dataset.index);
+                    structureBracket.roundSchedule[key][index] = input.value;
+                    bracketChanged = true;
+                }
+            });
+
+            if (groupsChanged) {
+                localStorage.setItem('custom_match_schedule', JSON.stringify(matchSchedule));
+            }
+            if (bracketChanged) {
+                localStorage.setItem('custom_bracket_structure', JSON.stringify(structureBracket));
+            }
+            
+            alert('¡Horarios actualizados correctamente!');
+            
+            // Recargar vistas
+            const currentJornada = document.querySelector('.jornada-btn.bg-purple-500');
+            if (currentJornada) {
+                renderMatches(currentJornada.id.replace('btn-jornada-', ''));
+            }
+            
+            // Recargar bracket si existe en la página
+            if (typeof renderSide === 'function') {
+                const colL = document.getElementById('col-L-1');
+                if (colL) {
+                    colL.innerHTML = '';
+                    document.getElementById('col-L-2').innerHTML = '';
+                    document.getElementById('col-L-3').innerHTML = '';
+                    document.getElementById('col-L-4').innerHTML = '';
+                    document.getElementById('col-R-1').innerHTML = '';
+                    document.getElementById('col-R-2').innerHTML = '';
+                    document.getElementById('col-R-3').innerHTML = '';
+                    document.getElementById('col-R-4').innerHTML = '';
+                    renderSide('L');
+                    renderSide('R');
+                }
+            }
+        });
+    }
+});
+
+// --- Lógica del Contador Mundial 2026 ---
+function initWorldCupCountdown() {
+    const openingDate = new Date('June 11, 2026 18:00:00').getTime();
+    
+    const updateCountdown = () => {
+        const now = new Date().getTime();
+        const distance = openingDate - now;
+        
+        // Elementos del DOM
+        const daysEl = document.getElementById('days');
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
+        
+        if (!daysEl) return;
+
+        if (distance < 0) {
+            daysEl.innerText = "00";
+            hoursEl.innerText = "00";
+            minutesEl.innerText = "00";
+            secondsEl.innerText = "00";
+            return;
+        }
+        
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+        daysEl.innerText = String(days).padStart(2, '0');
+        hoursEl.innerText = String(hours).padStart(2, '0');
+        minutesEl.innerText = String(minutes).padStart(2, '0');
+        secondsEl.innerText = String(seconds).padStart(2, '0');
+    };
+    
+    // Actualizar cada segundo para mostrar los segundos
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+}
+
+// Inicializar al cargar el DOM
+document.addEventListener('DOMContentLoaded', initWorldCupCountdown);

@@ -58,6 +58,37 @@ body {
     background: #475569;
 }
 
+/* Indicador de scroll para móviles */
+.scroll-hint {
+    display: none;
+}
+
+@media (max-width: 1024px) {
+    .scroll-hint {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 10px;
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.2);
+        border-radius: 12px;
+        margin-bottom: 20px;
+        color: #10b981;
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        animation: pulse-soft 2s infinite;
+    }
+}
+
+@keyframes pulse-soft {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
 .bracket-container {
     display: grid;
     grid-template-columns: repeat(9, 240px);
@@ -258,4 +289,26 @@ body {
         width: 50px;
         height: 50px;
     }
+}
+
+/* --- Mejoras de Portada Mundial 2026 --- */
+
+/* Animación de entrada para el Hero */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-animate {
+    animation: fadeInUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+/* Efecto de pulso suave para el bote */
+@keyframes glowPulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.1); }
+    50% { box-shadow: 0 0 40px rgba(251, 191, 36, 0.3); }
+}
+
+.bote-glow {
+    animation: glowPulse 4s ease-in-out infinite;
 }
