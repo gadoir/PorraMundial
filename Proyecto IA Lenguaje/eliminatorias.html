@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuadro Final - Porra Mundial 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #ccc; overflow-x: hidden; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        
+        .bracket-scroll {
+            overflow-x: auto;
+            padding: 40px 20px;
+            background: #121212;
+            min-height: 100vh;
+        }
+
+        .bracket-container {
+            display: grid;
+            grid-template-columns: repeat(9, 240px);
+            gap: 0;
+            min-width: 2200px;
+            justify-content: center;
+        }
+
+        .column { display: flex; flex-direction: column; height: 1100px; }
+        .match-spacer { flex-grow: 1; }
+
+        .match-container {
+            position: relative;
+            padding: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .match-box {
+            background: #222;
+            border: 1px solid #333;
+            border-radius: 10px;
+            width: 210px;
+            z-index: 10;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+
+        .match-header {
+            padding: 5px 10px;
+            background: rgba(0,0,0,0.4);
+            font-size: 9px;
+            font-weight: 800;
+            color: #666;
+            border-bottom: 1px solid #333;
+            text-transform: uppercase;
+        }
+
+        .team-row {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 1px solid #333;
+        }
+
+        .team-row:last-child { border-bottom: none; }
+        .team-row.selected { background: rgba(16, 185, 129, 0.1); }
+        .team-row.selected .team-name { color: #fff; }
+        .team-row.selected .team-shield { color: #10b981; }
+
+        .team-shield { width: 16px; height: 16px; margin-right: 10px; color: #444; }
+        .team-name { font-size: 10px; font-weight: 700; text-transform: uppercase; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* CONNECTORS - MIRRORED */
+        .connector { position: absolute; background: #333; z-index: 5; }
+        
+        .side-left .connector-out { right: 0; width: 30px; height: 2px; top: 50%; }
+        .side-left .connector-vertical { right: 0; width: 2px; }
+        .side-left .top-of-pair .connector-vertical { top: 50%; height: 50%; }
+        .side-left .bottom-of-pair .connector-vertical { bottom: 50%; height: 50%; }
+        .side-left .is-entry .connector-in { left: -30px; width: 30px; height: 2px; top: 50%; }
+
+        .side-right .connector-out { left: 0; width: 30px; height: 2px; top: 50%; }
+        .side-right .connector-vertical { left: 0; width: 2px; }
+        .side-right .top-of-pair .connector-vertical { top: 50%; height: 50%; }
+        .side-right .bottom-of-pair .connector-vertical { bottom: 50%; height: 50%; }
+        .side-right .is-entry .connector-in { right: -30px; width: 30px; height: 2px; top: 50%; }
+
+        .phase-title {
+            font-size: 9px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            text-align: center;
+            padding: 15px 0;
+            color: #555;
+        }
+
+        .center-column { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 60px; }
+        .center-match-label { font-size: 10px; font-weight: 900; text-transform: uppercase; color: #fff; margin-bottom: 10px; letter-spacing: 0.1em; }
+    </style>
+</head>
+<body>
+
+    <header class="bg-[#111] border-b border-white/5 py-3 md:py-4 px-4 md:px-8 flex items-center justify-between sticky top-0 z-[100] backdrop-blur-md">
+        <a href="index.html" class="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            <span class="font-bold text-[10px] md:text-xs uppercase tracking-widest">Volver</span>
+        </a>
+        
+        <div class="absolute left-1/2 -translate-x-1/2 hidden lg:block">
+            <h1 class="text-xs font-black text-brand-green uppercase tracking-[0.4em]">Cuadro Maestro - Copa Mundial 2026</h1>
+        </div>
+
+        <button type="submit" form="knockout-form" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black uppercase tracking-widest px-4 md:px-6 py-2 md:py-2.5 rounded-xl shadow-lg shadow-emerald-600/20 transition-all hover:scale-105 active:scale-95 text-[9px] md:text-[10px]">
+            <span class="hidden md:inline">Guardar Pronóstico</span>
+            <span class="md:hidden">Guardar</span>
+        </button>
+    </header>
+
+    <!-- FLOATING SAVE & EXPORT BUTTONS (BOTTOM LEFT) -->
+    <div class="fixed bottom-6 md:bottom-10 left-4 md:left-10 z-[200] flex flex-col space-y-3">
+        <button type="button" onclick="downloadSQL()" class="flex items-center space-x-2 md:space-x-3 bg-white/5 hover:bg-white/10 backdrop-blur-xl border border-white/10 text-white p-3 md:p-4 rounded-2xl shadow-2xl transition-all hover:scale-105 active:scale-95 group">
+            <div class="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400">
+                <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>
+            </div>
+            <div class="text-left pr-1 md:pr-2">
+                <div class="text-[8px] md:text-[10px] font-black uppercase tracking-widest">Exportar SQL</div>
+                <div class="text-[7px] md:text-[9px] opacity-70 font-bold uppercase hidden md:block">Fase 2 completa</div>
+            </div>
+        </button>
+
+        <button type="submit" form="knockout-form" class="flex items-center space-x-2 md:space-x-3 bg-emerald-600 hover:bg-emerald-500 text-white p-3 md:p-4 rounded-2xl shadow-2xl transition-all hover:scale-110 active:scale-95 group">
+            <div class="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-white/20 flex items-center justify-center">
+                <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+            </div>
+            <div class="text-left pr-1 md:pr-2">
+                <div class="text-[8px] md:text-[10px] font-black uppercase tracking-widest">Guardar Ahora</div>
+                <div class="text-[7px] md:text-[9px] opacity-70 font-bold uppercase hidden md:block">Asegura tu cuadro</div>
+            </div>
+        </button>
+    </div>
+
+    <!-- Indicador de Scroll para Móvil -->
+    <div class="px-4">
+        <div class="scroll-hint">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+            </svg>
+            <span>Desliza para ver el cuadro completo</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+            </svg>
+        </div>
+    </div>
+
+    <main class="bracket-scroll no-scrollbar">
+        <form id="knockout-form">
+            <!-- BRACKET VISUAL -->
+            <div class="bracket-container">
+                <!-- LADO IZQUIERDO -->
+                <div class="column side-left" id="col-L-1"><div class="phase-title text-blue-500">Dieciseisavos de final</div></div>
+                <div class="column side-left" id="col-L-2"><div class="phase-title text-purple-500">Octavos de final</div></div>
+                <div class="column side-left" id="col-L-3"><div class="phase-title text-brand-gold">Cuartos de final</div></div>
+                <div class="column side-left" id="col-L-4"><div class="phase-title text-brand-green">Semifinal</div></div>
+
+                <!-- CENTRO -->
+                <div class="column center-column" id="col-center">
+                    <div class="flex flex-col items-center">
+                        <div class="center-match-label">Final</div>
+                        <div class="match-box" id="match-final">
+                            <div class="match-header">19/07, 21:00</div>
+                            <div class="team-row" onclick="pick('final', 1, 'home')" id="final-1-home">
+                                <svg class="team-shield" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"></path></svg>
+                                <span class="team-name">Por definir</span>
+                            </div>
+                            <div class="team-row" onclick="pick('final', 1, 'away')" id="final-1-away">
+                                <svg class="team-shield" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"></path></svg>
+                                <span class="team-name">Por definir</span>
+                            </div>
+                            <input type="hidden" name="winner-final-1" id="input-final-1">
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="center-match-label text-amber-600">Partido por el tercer puesto</div>
+                        <div class="match-box" id="match-third">
+                            <div class="match-header">18/07, 23:00</div>
+                            <div class="team-row" onclick="pick('third', 1, 'home')" id="third-1-home">
+                                <svg class="team-shield" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"></path></svg>
+                                <span class="team-name">Por definir</span>
+                            </div>
+                            <div class="team-row" onclick="pick('third', 1, 'away')" id="third-1-away">
+                                <svg class="team-shield" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"></path></svg>
+                                <span class="team-name">Por definir</span>
+                            </div>
+                            <input type="hidden" name="winner-third-1" id="input-third-1">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LADO DERECHO -->
+                <div class="column side-right" id="col-R-4"><div class="phase-title text-brand-green">Semifinal</div></div>
+                <div class="column side-right" id="col-R-3"><div class="phase-title text-brand-gold">Cuartos de final</div></div>
+                <div class="column side-right" id="col-R-2"><div class="phase-title text-purple-500">Octavos de final</div></div>
+                <div class="column side-right" id="col-R-1"><div class="phase-title text-blue-500">Dieciseisavos de final</div></div>
+            </div>
+
+            <!-- LISTADO DETALLADO -->
+            <div class="max-w-4xl mx-auto mt-32 p-8 bg-[#1a1a1a] rounded-3xl border border-white/5 shadow-2xl mb-20">
+                <div class="flex flex-col md:flex-row items-center justify-between mb-12 gap-6">
+                    <h2 class="text-xl font-black text-white uppercase tracking-[0.3em]">Calendario Detallado</h2>
+                    
+                    <select id="jornada-select" onchange="renderCalendar(this.value)" class="bg-[#222] text-white border border-white/10 rounded-xl px-6 py-3 font-bold text-xs uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-brand-gold/50 transition-all">
+                        <option value="4">Jornada 4: Dieciseisavos</option>
+                        <option value="5">Jornada 5: Octavos</option>
+                        <option value="6">Jornada 6: Cuartos</option>
+                        <option value="7">Jornada 7: Semifinales</option>
+                        <option value="8">Jornada 8: 3er Puesto</option>
+                        <option value="9">Jornada 9: Gran Final</option>
+                    </select>
+                </div>
+                
+                <div id="calendar-list" class="space-y-4">
+                    <!-- Inyectado por JS -->
+                </div>
+            </div>
+
+            <!-- AI ANALYST FLOATING PANEL -->
+            <div id="ai-analyst" class="fixed bottom-6 md:bottom-10 right-4 md:right-10 z-[200] w-64 md:w-80 group">
+                <div id="ai-panel" class="hidden glass rounded-3xl p-4 md:p-6 border-brand-gold/30 shadow-2xl animate-in slide-in-from-right-10 duration-500">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-brand-gold/20 flex items-center justify-center">
+                            <span class="animate-pulse text-sm md:text-base">🤖</span>
+                        </div>
+                        <h4 class="text-[9px] md:text-xs font-black text-brand-gold uppercase tracking-widest">Analista IA Maestro</h4>
+                    </div>
+                    <div id="ai-content" class="text-[10px] md:text-[11px] text-slate-400 leading-relaxed italic">
+                        Selecciona un enfrentamiento definido para recibir mi análisis estratégico...
+                    </div>
+                </div>
+                
+                <button type="button" onclick="toggleAI()" class="mt-4 ml-auto flex items-center space-x-2 md:space-x-3 bg-black/80 backdrop-blur-xl border border-brand-gold/30 p-3 md:p-4 rounded-2xl hover:scale-105 transition-all shadow-2xl group">
+                    <div class="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-brand-gold flex items-center justify-center text-black shadow-lg shadow-brand-gold/20">
+                        <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    <div class="text-left">
+                        <div class="text-[8px] md:text-[10px] font-black text-brand-gold uppercase tracking-widest">Analista IA</div>
+                        <div id="ai-status-text" class="text-[7px] md:text-[9px] text-slate-500 font-bold uppercase hidden md:block">Esperando Equipos</div>
+                    </div>
+                </button>
+            </div>
+
+            <div class="flex justify-center p-20">
+                <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black uppercase tracking-[0.2em] px-12 py-5 rounded-2xl shadow-2xl transition-all hover:scale-105 active:scale-95">
+                    Guardar Pronóstico
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <script>
+        const structure = JSON.parse(localStorage.getItem('custom_bracket_structure')) || {
+            dieciseisavos_L: [
+                { id: 1, home: "2A", away: "2B", date: "28/06", time: "21:00" },
+                { id: 2, home: "1C", away: "2F", date: "29/06", time: "19:00" },
+                { id: 3, home: "1E", away: "3rd A/B/C/D/F", date: "29/06", time: "22:30" },
+                { id: 4, home: "1F", away: "2C", date: "30/06", time: "03:00" },
+                { id: 5, home: "2E", away: "Group I 2nd", date: "30/06", time: "19:00" },
+                { id: 6, home: "Group I Winner", away: "3rd C/D/F/G/H", date: "30/06", time: "23:00" },
+                { id: 7, home: "1A", away: "3rd C/E/F/H/I", date: "01/07", time: "03:00" },
+                { id: 8, home: "Group L Winner", away: "3rd E/H/I/J/K", date: "01/07", time: "18:00" }
+            ],
+            dieciseisavos_R: [
+                { id: 9, home: "1G", away: "3rd A/E/H/I/J", date: "01/07", time: "22:00" },
+                { id: 10, home: "1D", away: "3rd B/E/F/I/J", date: "02/07", time: "02:00" },
+                { id: 11, home: "1H", away: "Group J 2nd", date: "02/07", time: "21:00" },
+                { id: 12, home: "Group K 2nd", away: "Group L 2nd", date: "03/07", time: "01:00" },
+                { id: 13, home: "1B", away: "3rd E/F/G/I/J", date: "03/07", time: "05:00" },
+                { id: 14, home: "2D", away: "2G", date: "03/07", time: "20:00" },
+                { id: 15, home: "Group J Winner", away: "2H", date: "04/07", time: "00:00" },
+                { id: 16, home: "Group K Winner", away: "3rd D/E/I/J/L", date: "04/07", time: "03:30" }
+            ],
+            roundSchedule: {
+                "L-2": ["04/07, 19:00", "04/07, 23:00", "05/07, 22:00", "06/07, 02:00"],
+                "R-2": ["06/07, 21:00", "07/07, 02:00", "07/07, 18:00", "07/07, 22:00"],
+                "L-3": ["09/07, 22:00", "10/07, 21:00"],
+                "R-3": ["11/07, 23:00", "12/07, 03:00"],
+                "L-4": ["14/07, 21:00"],
+                "R-4": ["15/07, 21:00"]
+            }
+        };
+
+        const config = {
+            L: { 1: { next: "L-2", count: 8 }, 2: { next: "L-3", count: 4 }, 3: { next: "L-4", count: 2 }, 4: { next: "final", count: 1 } },
+            R: { 1: { next: "R-2", count: 8 }, 2: { next: "R-3", count: 4 }, 3: { next: "R-4", count: 2 }, 4: { next: "final", count: 1 } }
+        };
+
+        function renderSide(side) {
+            for (let round = 1; round <= 4; round++) {
+                const col = document.getElementById(`col-${side}-${round}`);
+                const count = config[side][round].count;
+                for (let i = 0; i < count; i++) {
+                    const matchId = i + 1;
+                    const key = `${side}-${round}`;
+                    const schedule = structure.roundSchedule[key] ? structure.roundSchedule[key][i] : "TBD, TBD";
+                    const matchData = (round === 1) ? structure[`dieciseisavos_${side}`][i] : { home: "Por definir", away: "Por definir", date: schedule.split(', ')[0], time: schedule.split(', ')[1] };
+                    const container = document.createElement('div');
+                    container.className = `match-container ${i % 2 === 0 ? 'top-of-pair' : 'bottom-of-pair'} ${round > 1 ? 'is-entry' : ''}`;
+                    const spacerTop = document.createElement('div');
+                    spacerTop.className = "match-spacer";
+                    col.appendChild(spacerTop);
+                    container.innerHTML = `
+                        <div class="connector-in connector"></div>
+                        <div class="match-box">
+                            <div class="match-header">${matchData.date}, ${matchData.time}</div>
+                            <div class="team-row" onclick="pick('${side}-${round}', ${matchId}, 'home')" id="${side}-${round}-${matchId}-home">
+                                <svg class="team-shield" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"></path></svg>
+                                <span class="team-name">${matchData.home}</span>
+                            </div>
+                            <div class="team-row" onclick="pick('${side}-${round}', ${matchId}, 'away')" id="${side}-${round}-${matchId}-away">
+                                <svg class="team-shield" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"></path></svg>
+                                <span class="team-name">${matchData.away}</span>
+                            </div>
+                        </div>
+                        ${round < 4 ? '<div class="connector-out connector"></div><div class="connector-vertical connector"></div>' : ''}
+                        ${round === 4 ? '<div class="connector-out connector"></div>' : ''}
+                    `;
+                    col.appendChild(container);
+                    if (i === count - 1) {
+                        const spacerBottom = document.createElement('div');
+                        spacerBottom.className = "match-spacer";
+                        col.appendChild(spacerBottom);
+                    }
+                }
+            }
+        }
+
+        function toggleAI() {
+            const panel = document.getElementById('ai-panel');
+            panel.classList.toggle('hidden');
+        }
+
+        function analyzeLatestMatch(home, away) {
+            const content = document.getElementById('ai-content');
+            const statusText = document.getElementById('ai-status-text');
+            
+            if (home === "Por definir" || away === "Por definir") {
+                content.innerText = "Mis algoritmos necesitan dos rivales definidos para calcular probabilidades. ¡Sigue completando el cuadro!";
+                statusText.innerText = "Esperando Equipos";
+                statusText.classList.replace('text-brand-gold', 'text-slate-500');
+                return;
+            }
+
+            statusText.innerText = "Análisis Disponible";
+            statusText.classList.replace('text-slate-500', 'text-brand-gold');
+
+            const predictions = [
+                `Analizando el duelo entre ${home} y ${away}... Mi base de datos sugiere un choque de estilos. ${home} tiene un 54% de probabilidad de imponer su ritmo físico, mientras que ${away} buscará transiciones rápidas.`,
+                `¡Duelo de titanes! El enfrentamiento ${home} vs ${away} es estadísticamente el más igualado. El factor clave será la eficacia en el área. Veo un 48% de empate en los 90 min.`,
+                `Interesante cruce. ${home} llega con inercia ganadora, pero ${away} históricamente rinde mejor bajo presión en eliminatorias. Probabilidad de pase para ${home}: 62%.`,
+                `Mis circuitos detectan una posible sorpresa. Aunque ${home} es favorito sobre el papel, ${away} tiene un sistema defensivo que podría forzar la prórroga.`
+            ];
+
+            const randomPrediction = predictions[Math.floor(Math.random() * predictions.length)];
+            
+            content.innerHTML = `<span class="text-white font-bold">${home} vs ${away}:</span><br><br>${randomPrediction}`;
+            
+            // Auto-open if hidden
+            document.getElementById('ai-panel').classList.remove('hidden');
+        }
+
+        function downloadSQL() {
+            const picks = [];
+            document.querySelectorAll('.match-slot.selected').forEach(slot => {
+                const team = slot.querySelector('.team-name').innerText;
+                const matchId = slot.parentElement.id || slot.id;
+                picks.push(`('${team}', '${matchId}')`);
+            });
+
+            if (picks.length === 0) {
+                alert('No hay selecciones para exportar.');
+                return;
+            }
+
+            const sql = `CREATE TABLE IF NOT EXISTS pronosticos_fase2 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    equipo_ganador VARCHAR(100),
+    partido_id VARCHAR(50),
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO pronosticos_fase2 (equipo_ganador, partido_id) VALUES 
+${picks.join(',\n')};`;
+
+            const blob = new Blob([sql], { type: 'text/sql' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'pronosticos_fase2.sql';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function pick(key, matchId, pos) {
+            const homeEl = document.getElementById(`${key}-${matchId}-home`);
+            const awayEl = document.getElementById(`${key}-${matchId}-away`);
+            const homeName = homeEl.querySelector('.team-name').innerText;
+            const awayName = awayEl.querySelector('.team-name').innerText;
+            
+            if (homeName === "Por definir" || awayName === "Por definir") return;
+            
+            const winner = pos === 'home' ? homeName : awayName;
+            const loser = pos === 'home' ? awayName : homeName;
+            
+            [homeEl, awayEl].forEach(el => el.classList.remove('selected'));
+            const selected = pos === 'home' ? homeEl : awayEl;
+            selected.classList.add('selected');
+            
+            // Trigger AI Analysis
+            analyzeLatestMatch(homeName, awayName);
+
+            if (key === 'final' || key === 'third') return;
+            const [side, roundStr] = key.split('-');
+            const round = parseInt(roundStr);
+            const nextKey = config[side][round].next;
+            
+            if (nextKey === 'final') {
+                const finalPos = side === 'L' ? 'home' : 'away';
+                updateMatch('final', 1, finalPos, winner);
+                updateMatch('third', 1, finalPos, loser);
+            } else {
+                const nextMatchId = Math.ceil(matchId / 2);
+                const nextPos = matchId % 2 === 0 ? 'away' : 'home';
+                updateMatch(nextKey, nextMatchId, nextPos, winner);
+            }
+        }
+
+        function updateMatch(key, id, pos, name) {
+            const el = document.getElementById(`${key}-${id}-${pos}`);
+            if (el) {
+                const nameEl = el.querySelector('.team-name');
+                nameEl.innerText = name;
+                nameEl.style.color = 'white';
+                el.classList.remove('selected');
+                clearDownstream(key, id);
+            }
+        }
+
+        function clearDownstream(key, id) {
+            if (key === 'final' || key === 'third') return;
+            const [side, roundStr] = key.split('-');
+            const round = parseInt(roundStr);
+            const nextKey = config[side][round].next;
+            if (nextKey === 'final') {
+                const finalPos = side === 'L' ? 'home' : 'away';
+                resetMatch('final', 1, finalPos);
+                resetMatch('third', 1, finalPos);
+            } else {
+                const nextMatchId = Math.ceil(id / 2);
+                const nextPos = id % 2 === 0 ? 'away' : 'home';
+                resetMatch(nextKey, nextMatchId, nextPos);
+            }
+        }
+
+        function resetMatch(key, id, pos) {
+            const el = document.getElementById(`${key}-${id}-${pos}`);
+            if (el) {
+                el.querySelector('.team-name').innerText = "Por definir";
+                el.querySelector('.team-name').style.color = '#888';
+                el.classList.remove('selected');
+                clearDownstream(key, id);
+            }
+        }
+
+        function renderCalendar(jornadaId = "4") {
+            const calendar = document.getElementById('calendar-list');
+            calendar.innerHTML = '';
+            
+            let matches = [];
+            let title = "";
+
+            if (jornadaId === "4") {
+                matches = [...structure.dieciseisavos_L, ...structure.dieciseisavos_R];
+                title = "Dieciseisavos de final";
+            } else if (jornadaId === "5") {
+                matches = [...structure.roundSchedule["L-2"], ...structure.roundSchedule["R-2"]].map((s, i) => ({ 
+                    home: "Octavos Match " + (i+1), away: "TBD", date: s.split(', ')[0], time: s.split(', ')[1] 
+                }));
+                title = "Octavos de final";
+            } else if (jornadaId === "6") {
+                matches = [...structure.roundSchedule["L-3"], ...structure.roundSchedule["R-3"]].map((s, i) => ({ 
+                    home: "Cuartos Match " + (i+1), away: "TBD", date: s.split(', ')[0], time: s.split(', ')[1] 
+                }));
+                title = "Cuartos de final";
+            } else if (jornadaId === "7") {
+                matches = [structure.roundSchedule["L-4"][0], structure.roundSchedule["R-4"][0]].map((s, i) => ({ 
+                    home: "Semifinal " + (i+1), away: "TBD", date: s.split(', ')[0], time: s.split(', ')[1] 
+                }));
+                title = "Semifinales";
+            } else if (jornadaId === "8") {
+                matches = [{ home: "Perdedor Semi 1", away: "Perdedor Semi 2", date: "18/07", time: "23:00" }];
+                title = "Partido por el tercer puesto";
+            } else if (jornadaId === "9") {
+                matches = [{ home: "Ganador Semi 1", away: "Ganador Semi 2", date: "19/07", time: "21:00" }];
+                title = "Gran Final";
+            }
+
+            calendar.appendChild(createCalendarSection(title, matches));
+        }
+
+        function createCalendarSection(title, matches) {
+            const div = document.createElement('div');
+            div.className = "space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500";
+            div.innerHTML = `<h3 class="text-xs font-black text-brand-gold uppercase tracking-widest mb-6 border-b border-white/5 pb-2">${title}</h3>`;
+            matches.forEach(m => {
+                div.innerHTML += `
+                    <div class="bg-black/40 p-5 rounded-2xl border border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 hover:border-brand-gold/30 transition-all">
+                        <div class="flex flex-col items-center md:items-start">
+                            <div class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">${m.date}</div>
+                            <div class="text-[12px] text-brand-gold font-black">${m.time}</div>
+                        </div>
+                        <div class="flex items-center gap-6 text-[11px] font-black uppercase tracking-wider text-white">
+                            <span class="w-24 text-right">${m.home}</span>
+                            <span class="text-gray-600 bg-white/5 px-3 py-1 rounded-lg text-[9px]">VS</span>
+                            <span class="w-24 text-left">${m.away}</span>
+                        </div>
+                        <div class="hidden md:block text-[9px] font-bold text-gray-600 uppercase tracking-widest">Definición pendiente</div>
+                    </div>
+                `;
+            });
+            return div;
+        }
+
+        renderSide('L');
+        renderSide('R');
+        renderCalendar("4");
+    </script>
+</body>
+</html>

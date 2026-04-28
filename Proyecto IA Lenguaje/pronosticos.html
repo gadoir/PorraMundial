@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Pronósticos - Mundial 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0f172a',
+                            darker: '#020617',
+                            card: '#1e293b',
+                            green: '#10b981',
+                            gold: '#fbbf24',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="translations.js"></script>
+</head>
+
+<body class="bg-brand-darker text-slate-200 antialiased selection:bg-brand-green selection:text-white pb-20">
+
+    <!-- Navbar Minimalista -->
+    <nav class="fixed w-full z-50 bg-brand-darker/80 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="text-slate-400 hover:text-white flex items-center transition-colors">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                        </svg>
+                        <span data-i18n="footer_back">Volver</span>
+                    </a>
+                </div>
+
+                <!-- Selector de Idiomas (Dropdown) -->
+                <div class="relative group">
+                    <button id="lang-dropdown-btn" class="flex items-center space-x-2 bg-slate-800/50 hover:bg-slate-700 px-3 py-1.5 rounded-lg border border-slate-700 transition-all">
+                        <span id="current-lang-text" class="text-[10px] font-black uppercase tracking-widest text-slate-300">Español</span>
+                        <svg class="w-3 h-3 text-slate-500 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="absolute right-0 mt-2 w-32 bg-brand-card border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[200] overflow-hidden">
+                        <button onclick="changeLanguage('es')" class="w-full flex items-center px-4 py-3 hover:bg-white/5 transition-colors text-left">
+                            <span class="text-[10px] font-bold text-slate-300">Español</span>
+                        </button>
+                        <button onclick="changeLanguage('va')" class="w-full flex items-center px-4 py-3 hover:bg-white/5 transition-colors text-left border-t border-slate-800/50">
+                            <span class="text-[10px] font-bold text-slate-300">Valencià</span>
+                        </button>
+                        <button onclick="changeLanguage('en')" class="w-full flex items-center px-4 py-3 hover:bg-white/5 transition-colors text-left border-t border-slate-800/50">
+                            <span class="text-[10px] font-bold text-slate-300">English</span>
+                        </button>
+                    </div>
+                </div>
+                <span data-i18n="pronosticos_title"
+                    class="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-brand-green to-brand-gold">
+                    MIS PRONÓSTICOS
+                </span>
+                <div id="logged-user-display" data-i18n="loading"
+                    class="text-sm font-bold text-slate-400 bg-slate-800 px-3 py-1 rounded-lg">
+                    Cargando...
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="pt-32 pb-12 text-center">
+        <h1 class="text-4xl md:text-5xl font-black text-white mb-4"><span data-i18n="pronosticos_header">Crea tu Porra</span>
+        </h1>
+        <p data-i18n="pronosticos_desc" class="text-slate-400 max-w-2xl mx-auto px-4">
+            Selecciona los tres equipos que crees que pasarán de ronda en cada grupo.
+            Recuerda: ¡El orden exacto te da puntos extra!
+        </p>
+    </header>
+
+    <!-- Formulario de Pronósticos -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <form id="predictions-form" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Los grupos se generarán dinámicamente aquí -->
+            <div id="groups-loading" data-i18n="loading_groups" class="col-span-full py-20 text-center text-slate-500 animate-pulse">
+                Cargando grupos del Mundial...
+            </div>
+        </form>
+
+        <!-- Botón de Guardar -->
+        <div class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 w-full max-w-xs px-4">
+            <button id="save-predictions-btn" data-i18n="btn_save_pronosticos"
+                class="w-full bg-brand-green hover:bg-brand-green/90 text-white font-black uppercase tracking-widest py-4 px-8 rounded-2xl shadow-[0_0_30px_rgba(16,185,129,0.3)] transform transition-all hover:scale-105 active:scale-95">
+                Guardar Pronósticos
+            </button>
+        </div>
+
+        <!-- Botón de Captura (Flotante) -->
+        <div class="fixed bottom-8 right-4 md:right-8 z-50">
+            <button type="button" onclick="exportPredictionsImage(event)"
+                class="flex items-center space-x-2 md:space-x-3 bg-white/5 hover:bg-white/10 backdrop-blur-xl border border-white/10 text-white p-3 md:p-4 rounded-2xl shadow-2xl transition-all hover:scale-110 active:scale-95 group">
+                <div class="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-brand-green/20 flex items-center justify-center text-brand-green">
+                    <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                        </path>
+                    </svg>
+                </div>
+                <div class="text-left pr-1 md:pr-2 hidden sm:block">
+                    <div data-i18n="btn_share" class="text-[8px] md:text-[10px] font-black uppercase tracking-widest">Compartir</div>
+                    <div data-i18n="btn_download_img" class="text-[7px] md:text-[9px] opacity-70 font-bold uppercase">Descargar Imagen</div>
+                </div>
+            </button>
+        </div>
+    </main>
+
+    <!-- Modal de Éxito -->
+    <div id="success-modal"
+        class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 bg-brand-darker/90 backdrop-blur-sm">
+        <div class="bg-brand-card p-8 rounded-[2rem] border border-slate-700 max-w-sm w-full text-center shadow-2xl">
+            <div
+                class="w-20 h-20 bg-brand-green/20 text-brand-green rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+            <h3 data-i18n="modal_success_title" class="text-2xl font-bold text-white mb-2">¡Guardado!</h3>
+            <p data-i18n="modal_success_desc" class="text-slate-400 mb-8">Tus pronósticos han sido registrados correctamente en el sistema.</p>
+            <button onclick="window.location.href='index.html'" data-i18n="btn_go_home"
+                class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl transition-colors">
+                Ir al Panel Principal
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Lógica específica para la página de pronósticos
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Verificar sesión
+            const loggedUser = localStorage.getItem('logged_user');
+            const isAdmin = localStorage.getItem('is_admin') === 'true';
+
+            if (!loggedUser) {
+                alert(t('alert_login'));
+                window.location.href = 'index.html';
+                return;
+            }
+
+            if (isAdmin) {
+                alert('Los administradores no pueden realizar pronósticos, solo gestionar el torneo.');
+                window.location.href = 'index.html';
+                return;
+            }
+            document.getElementById('logged-user-display').innerText = loggedUser;
+
+            // 2. Renderizar Grupos
+            const container = document.getElementById('predictions-form');
+            container.innerHTML = '';
+
+            // Usamos los datos de 'groups' que están en script.js
+            // Como script.js se carga antes, 'groups' debería estar disponible si no está encapsulado.
+            // Para asegurarnos, lo re-declaramos o lo obtenemos de script.js si es global.
+            // En script.js (línea 280), 'groups' es una constante global.
+
+            Object.entries(groups).forEach(([groupName, teams]) => {
+                const groupCard = document.createElement('div');
+                groupCard.className = 'bg-brand-card rounded-3xl p-6 border border-slate-700 shadow-xl hover:border-slate-600 transition-all';
+
+                let selectsHtml = '';
+                [1, 2, 3].forEach(pos => {
+                    selectsHtml += `
+                        <div class="mb-4 last:mb-0">
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">${pos}º Puesto</label>
+                            <select name="group-${groupName}-pos-${pos}" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-green appearance-none cursor-pointer">
+                                <option value="" disabled selected>Selecciona equipo...</option>
+                                ${teams.map(t => `<option value="${t.name}">${t.name}</option>`).join('')}
+                            </select>
+                        </div>
+                    `;
+                });
+
+                groupCard.innerHTML = `
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-black text-white">Grupo ${groupName}</h2>
+                        <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-brand-green font-bold text-xs">${groupName}</div>
+                    </div>
+                    ${selectsHtml}
+                `;
+                container.appendChild(groupCard);
+            });
+
+            // 3. Cargar datos previos si existen
+            const allPredictions = JSON.parse(localStorage.getItem('porra_predictions') || '{}');
+            const userPredictions = allPredictions[loggedUser] || {};
+
+            Object.entries(userPredictions).forEach(([name, value]) => {
+                const select = document.querySelector(`[name="${name}"]`);
+                if (select) select.value = value;
+            });
+
+            // 4. Guardar Datos
+            const form = document.getElementById('predictions-form');
+            document.getElementById('save-predictions-btn').addEventListener('click', async (e) => {
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    return;
+                }
+
+                const formData = new FormData(form);
+                const data = {};
+                formData.forEach((value, key) => data[key] = value);
+
+                // 4.1 Guardar en LocalStorage (Persistencia local)
+                const currentAll = JSON.parse(localStorage.getItem('porra_predictions') || '{}');
+                currentAll[loggedUser] = data;
+                localStorage.setItem('porra_predictions', JSON.stringify(currentAll));
+
+                // 4.2 Guardar en Servidor (SQL)
+                const formattedPredictions = [];
+                Object.keys(groups).forEach(groupName => {
+                    formattedPredictions.push({
+                        group: groupName,
+                        p1: data[`group-${groupName}-pos-1`],
+                        p2: data[`group-${groupName}-pos-2`],
+                        p3: data[`group-${groupName}-pos-3`]
+                    });
+                });
+
+                try {
+                    const response = await fetch('http://localhost:8000/api/save_porra', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            username: loggedUser,
+                            predictions: formattedPredictions
+                        })
+                    });
+                    const result = await response.json();
+                    console.log('SQL Guardado:', result);
+                } catch (err) {
+                    console.warn('Servidor no disponible para guardar SQL:', err);
+                }
+
+                document.getElementById('success-modal').classList.remove('hidden');
+            });
+        });
+
+        async function exportPredictionsImage(e) {
+            const form = document.getElementById('predictions-form');
+            const btn = e ? e.currentTarget : document.querySelector('button[onclick*="exportPredictionsImage"]');
+            const originalText = btn.innerHTML;
+            
+            try {
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+                
+                const textContainer = btn.querySelector('.text-left div:first-child');
+                if (textContainer) textContainer.innerText = "Procesando...";
+
+                // Capturamos el formulario con un clon para asegurar estilos
+                const canvas = await html2canvas(form, {
+                    backgroundColor: '#020617', // bg-brand-darker
+                    scale: 2,
+                    logging: false,
+                    useCORS: true,
+                    allowTaint: false,
+                    scrollX: 0,
+                    scrollY: -window.scrollY,
+                    windowWidth: form.scrollWidth,
+                    onclone: (clonedDoc) => {
+                        const clonedForm = clonedDoc.getElementById('predictions-form');
+                        if (clonedForm) {
+                            clonedForm.style.padding = '40px';
+                            clonedForm.style.background = '#020617';
+                            clonedForm.style.width = '1200px'; // Forzamos un ancho para que se vea bien
+                            clonedForm.classList.remove('grid-cols-1', 'md:grid-cols-2');
+                            clonedForm.classList.add('grid-cols-3');
+                        }
+                    }
+                });
+
+                const image = canvas.toDataURL("image/png");
+                const link = document.createElement('a');
+                const user = localStorage.getItem('logged_user') || 'Usuario';
+                link.download = `Mis-Pronosticos-${user}.png`;
+                link.href = image;
+                link.click();
+            } catch (err) {
+                console.error("Error exportando imagen:", err);
+                alert("Hubo un error al generar la imagen. Inténtalo de nuevo.");
+            } finally {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                btn.innerHTML = originalText;
+            }
+        }
+    </script>
+</body>
+
+</html>
