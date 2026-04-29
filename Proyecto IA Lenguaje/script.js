@@ -1,6 +1,10 @@
 // Inicialización de EmailJS
 (function() {
-    emailjs.init("6klM2ow43hZubJzPt");
+    if (typeof emailjs !== 'undefined') {
+        emailjs.init("6klM2ow43hZubJzPt");
+    } else {
+        console.warn("EmailJS SDK no cargado. Las notificaciones por correo no funcionarán.");
+    }
 })();
 
 // Variables Globales

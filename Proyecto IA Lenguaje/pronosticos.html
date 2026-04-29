@@ -26,8 +26,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-    <script src="translations.js"></script>
 </head>
 
 <body class="bg-brand-darker text-slate-200 antialiased selection:bg-brand-green selection:text-white pb-20">
@@ -42,33 +40,14 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                         </svg>
-                        <span data-i18n="footer_back">Volver</span>
+                        Volver
                     </a>
                 </div>
-
-                <!-- Selector de Idiomas (Dropdown) -->
-                <div class="relative group">
-                    <button id="lang-dropdown-btn" class="flex items-center space-x-2 bg-slate-800/50 hover:bg-slate-700 px-3 py-1.5 rounded-lg border border-slate-700 transition-all">
-                        <span id="current-lang-text" class="text-[10px] font-black uppercase tracking-widest text-slate-300">Español</span>
-                        <svg class="w-3 h-3 text-slate-500 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </button>
-                    <div class="absolute right-0 mt-2 w-32 bg-brand-card border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[200] overflow-hidden">
-                        <button onclick="changeLanguage('es')" class="w-full flex items-center px-4 py-3 hover:bg-white/5 transition-colors text-left">
-                            <span class="text-[10px] font-bold text-slate-300">Español</span>
-                        </button>
-                        <button onclick="changeLanguage('va')" class="w-full flex items-center px-4 py-3 hover:bg-white/5 transition-colors text-left border-t border-slate-800/50">
-                            <span class="text-[10px] font-bold text-slate-300">Valencià</span>
-                        </button>
-                        <button onclick="changeLanguage('en')" class="w-full flex items-center px-4 py-3 hover:bg-white/5 transition-colors text-left border-t border-slate-800/50">
-                            <span class="text-[10px] font-bold text-slate-300">English</span>
-                        </button>
-                    </div>
-                </div>
-                <span data-i18n="pronosticos_title"
+                <span
                     class="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-brand-green to-brand-gold">
                     MIS PRONÓSTICOS
                 </span>
-                <div id="logged-user-display" data-i18n="loading"
+                <div id="logged-user-display"
                     class="text-sm font-bold text-slate-400 bg-slate-800 px-3 py-1 rounded-lg">
                     Cargando...
                 </div>
@@ -78,9 +57,9 @@
 
     <!-- Header -->
     <header class="pt-32 pb-12 text-center">
-        <h1 class="text-4xl md:text-5xl font-black text-white mb-4"><span data-i18n="pronosticos_header">Crea tu Porra</span>
+        <h1 class="text-4xl md:text-5xl font-black text-white mb-4">Crea tu <span class="text-brand-green">Porra</span>
         </h1>
-        <p data-i18n="pronosticos_desc" class="text-slate-400 max-w-2xl mx-auto px-4">
+        <p class="text-slate-400 max-w-2xl mx-auto px-4">
             Selecciona los tres equipos que crees que pasarán de ronda en cada grupo.
             Recuerda: ¡El orden exacto te da puntos extra!
         </p>
@@ -90,34 +69,16 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <form id="predictions-form" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <!-- Los grupos se generarán dinámicamente aquí -->
-            <div id="groups-loading" data-i18n="loading_groups" class="col-span-full py-20 text-center text-slate-500 animate-pulse">
+            <div id="groups-loading" class="col-span-full py-20 text-center text-slate-500 animate-pulse">
                 Cargando grupos del Mundial...
             </div>
         </form>
 
         <!-- Botón de Guardar -->
         <div class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 w-full max-w-xs px-4">
-            <button id="save-predictions-btn" data-i18n="btn_save_pronosticos"
+            <button id="save-predictions-btn"
                 class="w-full bg-brand-green hover:bg-brand-green/90 text-white font-black uppercase tracking-widest py-4 px-8 rounded-2xl shadow-[0_0_30px_rgba(16,185,129,0.3)] transform transition-all hover:scale-105 active:scale-95">
                 Guardar Pronósticos
-            </button>
-        </div>
-
-        <!-- Botón de Captura (Flotante) -->
-        <div class="fixed bottom-8 right-4 md:right-8 z-50">
-            <button type="button" onclick="exportPredictionsImage(event)"
-                class="flex items-center space-x-2 md:space-x-3 bg-white/5 hover:bg-white/10 backdrop-blur-xl border border-white/10 text-white p-3 md:p-4 rounded-2xl shadow-2xl transition-all hover:scale-110 active:scale-95 group">
-                <div class="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-brand-green/20 flex items-center justify-center text-brand-green">
-                    <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
-                        </path>
-                    </svg>
-                </div>
-                <div class="text-left pr-1 md:pr-2 hidden sm:block">
-                    <div data-i18n="btn_share" class="text-[8px] md:text-[10px] font-black uppercase tracking-widest">Compartir</div>
-                    <div data-i18n="btn_download_img" class="text-[7px] md:text-[9px] opacity-70 font-bold uppercase">Descargar Imagen</div>
-                </div>
             </button>
         </div>
     </main>
@@ -132,15 +93,18 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
                 </svg>
             </div>
-            <h3 data-i18n="modal_success_title" class="text-2xl font-bold text-white mb-2">¡Guardado!</h3>
-            <p data-i18n="modal_success_desc" class="text-slate-400 mb-8">Tus pronósticos han sido registrados correctamente en el sistema.</p>
-            <button onclick="window.location.href='index.html'" data-i18n="btn_go_home"
+            <h3 class="text-2xl font-bold text-white mb-2">¡Guardado!</h3>
+            <p class="text-slate-400 mb-8">Tus pronósticos han sido registrados correctamente en el sistema.</p>
+            <button onclick="window.location.href='index.html'"
                 class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl transition-colors">
                 Ir al Panel Principal
             </button>
         </div>
     </div>
 
+    <script src="database/players_db.js"></script>
+    <script src="translations.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script src="script.js"></script>
     <script>
         // Lógica específica para la página de pronósticos
@@ -150,7 +114,7 @@
             const isAdmin = localStorage.getItem('is_admin') === 'true';
 
             if (!loggedUser) {
-                alert(t('alert_login'));
+                alert('Debes iniciar sesión para acceder a esta página.');
                 window.location.href = 'index.html';
                 return;
             }
@@ -253,56 +217,6 @@
                 document.getElementById('success-modal').classList.remove('hidden');
             });
         });
-
-        async function exportPredictionsImage(e) {
-            const form = document.getElementById('predictions-form');
-            const btn = e ? e.currentTarget : document.querySelector('button[onclick*="exportPredictionsImage"]');
-            const originalText = btn.innerHTML;
-            
-            try {
-                btn.disabled = true;
-                btn.style.opacity = '0.5';
-                
-                const textContainer = btn.querySelector('.text-left div:first-child');
-                if (textContainer) textContainer.innerText = "Procesando...";
-
-                // Capturamos el formulario con un clon para asegurar estilos
-                const canvas = await html2canvas(form, {
-                    backgroundColor: '#020617', // bg-brand-darker
-                    scale: 2,
-                    logging: false,
-                    useCORS: true,
-                    allowTaint: false,
-                    scrollX: 0,
-                    scrollY: -window.scrollY,
-                    windowWidth: form.scrollWidth,
-                    onclone: (clonedDoc) => {
-                        const clonedForm = clonedDoc.getElementById('predictions-form');
-                        if (clonedForm) {
-                            clonedForm.style.padding = '40px';
-                            clonedForm.style.background = '#020617';
-                            clonedForm.style.width = '1200px'; // Forzamos un ancho para que se vea bien
-                            clonedForm.classList.remove('grid-cols-1', 'md:grid-cols-2');
-                            clonedForm.classList.add('grid-cols-3');
-                        }
-                    }
-                });
-
-                const image = canvas.toDataURL("image/png");
-                const link = document.createElement('a');
-                const user = localStorage.getItem('logged_user') || 'Usuario';
-                link.download = `Mis-Pronosticos-${user}.png`;
-                link.href = image;
-                link.click();
-            } catch (err) {
-                console.error("Error exportando imagen:", err);
-                alert("Hubo un error al generar la imagen. Inténtalo de nuevo.");
-            } finally {
-                btn.disabled = false;
-                btn.style.opacity = '1';
-                btn.innerHTML = originalText;
-            }
-        }
     </script>
 </body>
 
